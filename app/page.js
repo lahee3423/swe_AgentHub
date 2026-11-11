@@ -15,6 +15,18 @@ const connectionDots = [
   [87.4, 48.1], [78, 60.6], [73.8, 78.4], [65.5, 91.9],
 ];
 
+const agentTopics = {
+  health: ["Cardiology", "Pulmonology", "Nephrology", "Orthopedics", "Patient Info", "Room Agent"],
+  roommate: ["Shared Calendar", "House Rules", "Shopping List", "Bill Split", "Cleaning Plan", "Home Notes"],
+  coffee: ["Espresso", "Brew Guide", "Bean Notes", "Café Finder", "Daily Routine", "Taste Profile"],
+  baby: ["Sleep Routine", "Feeding Log", "Growth Notes", "Activity Plan", "Care Circle", "Daily Check-in"],
+  music: ["Daily Mix", "Mood Radio", "New Releases", "Listening History", "Sound Profile", "Shared Playlist"],
+};
+
+const topicPositions = [
+  [16, 28], [27, 72], [67, 69], [14, 83], [86, 78], [84, 29],
+];
+
 const tabs = ["Agent Hub", "My Agent", "Agent Studio"];
 
 function SearchIcon() {
@@ -26,7 +38,7 @@ function SearchIcon() {
   );
 }
 
-function Network({ query, onPick }) {
+function Network({ query, onPick, onSelect }) {
   const matches = useMemo(
     () => agents.filter((agent) => `${agent.name} ${agent.note}`.toLowerCase().includes(query.toLowerCase())),
     [query]
@@ -57,7 +69,7 @@ function Network({ query, onPick }) {
       {agents.map((agent) => {
         const hidden = query && !matches.some((match) => match.id === agent.id);
         return (
-          <button key={agent.id} className={`agent-node label-${agent.labelSide} ${hidden ? "is-muted" : ""}`} style={{ left: `${agent.x}%`, top: `${agent.y}%` }} onClick={() => onPick(agent.name)}>
+          <button key={agent.id} className={`agent-node label-${agent.labelSide} ${hidden ? "is-muted" : ""}`} style={{ left: `${agent.x}%`, top: `${agent.y}%` }} onClick={() => onSelect(agent)}>
             <span className="agent-symbol">{agent.icon}</span>
             <span className="agent-copy"><strong>{agent.name}</strong><small>{agent.note}</small></span>
           </button>
@@ -66,6 +78,39 @@ function Network({ query, onPick }) {
 
       <span className="network-count">05 AGENTS ONLINE</span>
     </div>
+  );
+}
+
+function AgentDetail({ agent, onBack }) {
+  const topics = agentTopics[agent.id].map((label, index) => ({ label, x: topicPositions[index][0], y: topicPositions[index][1] }));
+
+  return (
+    <main className="agent-detail">
+      <div className="detail-bar">
+        <button className="detail-back" onClick={onBack}><span>←</span> Agent Hub</button>
+        <span className="detail-title">[ {agent.name} ]</span>
+        <button className="detail-launch" aria-label={`Open ${agent.name}`}>↗</button>
+      </div>
+
+      <div className="detail-network" aria-label={`${agent.name} capabilities`}>
+        <svg className="detail-connections" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
+          {topics.map((topic) => <line key={topic.label} x1="50" y1="38" x2={topic.x} y2={topic.y} />)}
+        </svg>
+
+        <div className="detail-center">
+          <span className="detail-star">✦</span>
+          <strong>{agent.name}</strong>
+          <small>{agent.note}</small>
+        </div>
+
+        {topics.map((topic) => (
+          <div key={topic.label} className={`detail-node ${topic.x > 50 ? "detail-node-left" : "detail-node-right"}`} style={{ left: `${topic.x}%`, top: `${topic.y}%` }}>
+            <span className="detail-dot" />
+            <strong>{topic.label}</strong>
+          </div>
+        ))}
+      </div>
+    </main>
   );
 }
 
@@ -87,15 +132,25 @@ function SecondaryPage({ type, onBack }) {
 export default function Home() {
   const [activeTab, setActiveTab] = useState("Agent Hub");
   const [query, setQuery] = useState("");
+  const [selectedAgent, setSelectedAgent] = useState(null);
+
+  const changeTab = (tab) => {
+    setActiveTab(tab);
+    if (tab === "Agent Hub") setSelectedAgent(null);
+  };
 
   return (
     <div className="site-shell">
       <header className="header">
         <nav aria-label="Main navigation">
-          {tabs.map((tab) => <button key={tab} className={activeTab === tab ? "active" : ""} onClick={() => setActiveTab(tab)}>{tab}</button>)}
+          {tabs.map((tab) => <button key={tab} className={activeTab === tab ? "active" : ""} onClick={() => changeTab(tab)}>{tab}</button>)}
         </nav>
       </header>
-      {activeTab === "Agent Hub" ? <Network query={query} onPick={setQuery} /> : <SecondaryPage type={activeTab} onBack={() => setActiveTab("Agent Hub")} />}
+      {activeTab === "Agent Hub"
+        ? selectedAgent
+          ? <AgentDetail agent={selectedAgent} onBack={() => setSelectedAgent(null)} />
+          : <Network query={query} onPick={setQuery} onSelect={setSelectedAgent} />
+        : <SecondaryPage type={activeTab} onBack={() => changeTab("Agent Hub")} />}
       <footer><span>AGENT HUB / 2026</span><span>Human needs, intelligent connections.</span></footer>
     </div>
   );
