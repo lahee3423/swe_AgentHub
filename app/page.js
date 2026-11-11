@@ -205,7 +205,7 @@ function AgentDetail({ agent, onBack }) {
     <main className="agent-detail">
       <div className="detail-bar">
         <button className="detail-back" onClick={onBack}><span>←</span> Agent Hub</button>
-        <span className="detail-title">{agent.id === "health" ? "" : `[ ${agent.name} ]`}</span>
+        <span className="detail-title" aria-hidden="true" />
         <button className="detail-launch" aria-label={`Open ${agent.name}`}>↗</button>
       </div>
 
