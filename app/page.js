@@ -12,23 +12,6 @@ const agents = [
 
 const tabs = ["Agent Hub", "My Agent", "Agent Studio"];
 
-function Logo() {
-  return (
-    <div className="logo" aria-label="Agent Hub home">
-      <span className="logo-mark"><i /><i /><i /></span>
-      <span>agent<span className="logo-dot">.</span>hub</span>
-    </div>
-  );
-}
-
-function PulseLine() {
-  return (
-    <svg className="pulse" viewBox="0 0 480 42" aria-hidden="true" preserveAspectRatio="none">
-      <path d="M0 22H126l18-1 12-12 10 27 12-31 13 19 10-2h67l18-1 10-11 14 26 12-31 12 18 12-1h124" />
-    </svg>
-  );
-}
-
 function SearchIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -107,12 +90,9 @@ export default function Home() {
   return (
     <div className="site-shell">
       <header className="header">
-        <Logo />
-        <PulseLine />
         <nav aria-label="Main navigation">
           {tabs.map((tab) => <button key={tab} className={activeTab === tab ? "active" : ""} onClick={() => setActiveTab(tab)}>{tab}</button>)}
         </nav>
-        <button className="menu" aria-label="Open menu"><span/><span/></button>
       </header>
       {activeTab === "Agent Hub" ? <Network query={query} onPick={setQuery} /> : <SecondaryPage type={activeTab} onBack={() => setActiveTab("Agent Hub")} />}
       <footer><span>AGENT HUB / 2026</span><span>Human needs, intelligent connections.</span></footer>
