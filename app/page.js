@@ -11,7 +11,7 @@ const agents = [
 ];
 
 const agentTopics = {
-  health: ["Cardiology Agent", "Orthopedics Agent", "Room Agents 301 / 302 / 303"],
+  health: ["Cardiology Agent", "Orthopedics Agent", "Room Agents"],
   roommate: ["Smart TV", "Smart Lock", "Robot Vacuum", "Washing Machine", "Energy Monitor", "Shared Lighting"],
   coffee: ["Coffee Machine", "Smart Plug", "Water Purifier", "Kitchen Light", "Smart Speaker", "Routine Button"],
   baby: ["Baby Monitor", "Night Light", "Air Purifier", "Humidifier", "Smart Camera", "White Noise"],
@@ -20,6 +20,10 @@ const agentTopics = {
 
 const topicPositions = [
   [16, 28], [27, 72], [67, 69], [14, 83], [86, 78], [84, 29],
+];
+
+const hospitalTopicPositions = [
+  [28, 30], [72, 30], [50, 80],
 ];
 
 const tabs = ["Agent Hub", "My Agent", "Agent Studio"];
@@ -194,13 +198,14 @@ function SearchResults({ query, onPick, onSearch, onBack }) {
 }
 
 function AgentDetail({ agent, onBack }) {
-  const topics = agentTopics[agent.id].map((label, index) => ({ label, x: topicPositions[index][0], y: topicPositions[index][1] }));
+  const positions = agent.id === "health" ? hospitalTopicPositions : topicPositions;
+  const topics = agentTopics[agent.id].map((label, index) => ({ label, x: positions[index][0], y: positions[index][1] }));
 
   return (
     <main className="agent-detail">
       <div className="detail-bar">
         <button className="detail-back" onClick={onBack}><span>←</span> Agent Hub</button>
-        <span className="detail-title">[ {agent.name} ]</span>
+        <span className="detail-title">{agent.id === "health" ? "" : `[ ${agent.name} ]`}</span>
         <button className="detail-launch" aria-label={`Open ${agent.name}`}>↗</button>
       </div>
 
@@ -216,7 +221,7 @@ function AgentDetail({ agent, onBack }) {
         </div>
 
         {topics.map((topic) => (
-          <div key={topic.label} className={`detail-node ${topic.x > 50 ? "detail-node-left" : "detail-node-right"}`} style={{ left: `${topic.x}%`, top: `${topic.y}%` }}>
+          <div key={topic.label} className={`detail-node ${topic.x > 50 ? "detail-node-left" : "detail-node-right"} ${agent.id === "health" ? "hospital-detail-node" : ""}`} style={{ left: `${topic.x}%`, top: `${topic.y}%` }}>
             <span className="detail-dot" />
             <strong>{topic.label}</strong>
           </div>
