@@ -30,7 +30,8 @@ nav button:nth-child(2) { justify-self: center; }
 nav button:last-child { justify-self: end; }
 nav button::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 4px; background: var(--accent); transform: scaleX(0); transition: transform .25s ease; }
 nav button:hover::after, nav button.active::after { transform: scaleX(1); }
-.tab-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 11px; letter-spacing: .15px; }
+.tab-breadcrumb { display: flex; align-items: center; gap: 6px; letter-spacing: .15px; }
+.tab-breadcrumb span:nth-child(2), .tab-breadcrumb span:last-child { font-size: 11px; }
 .tab-breadcrumb span:last-child { color: var(--gray); font-weight: 650; }
 
 .network { min-height: calc(100svh - 102px); flex: 1; position: relative; isolation: isolate; }
@@ -136,7 +137,8 @@ footer { height: 44px; padding: 0 3.5vw; display: flex; align-items: center; jus
 @media (max-width: 640px) {
   .header { height: 54px; padding: 0 20px; }
   nav button { font-size: 14px; }
-  .tab-breadcrumb { gap: 4px; font-size: 9px; }
+  .tab-breadcrumb { gap: 4px; }
+  .tab-breadcrumb span:nth-child(2), .tab-breadcrumb span:last-child { font-size: 9px; }
   nav button::after { bottom: -1px; height: 3px; }
   .network { min-height: calc(100svh - 54px); }
   .connections { opacity: .7; }
