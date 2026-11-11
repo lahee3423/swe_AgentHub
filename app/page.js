@@ -11,7 +11,7 @@ const agents = [
 ];
 
 const agentTopics = {
-  health: ["Air Conditioner", "Air Purifier", "Smart Scale", "Sleep Sensor", "Humidifier", "Smart Lighting"],
+  health: ["Cardiology Agent", "Orthopedics Agent", "Room Agents 301 / 302 / 303"],
   roommate: ["Smart TV", "Smart Lock", "Robot Vacuum", "Washing Machine", "Energy Monitor", "Shared Lighting"],
   coffee: ["Coffee Machine", "Smart Plug", "Water Purifier", "Kitchen Light", "Smart Speaker", "Routine Button"],
   baby: ["Baby Monitor", "Night Light", "Air Purifier", "Humidifier", "Smart Camera", "White Noise"],
