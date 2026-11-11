@@ -128,4 +128,72 @@ function AgentDetail({ agent, onBack }) {
 
   return (
     <main className="agent-detail">
-      <div cl
+      <div className="detail-bar">
+        <button className="detail-back" onClick={onBack}><span>←</span> Agent Hub</button>
+        <span className="detail-title">[ {agent.name} ]</span>
+        <button className="detail-launch" aria-label={`Open ${agent.name}`}>↗</button>
+      </div>
+
+      <div className="detail-network" aria-label={`${agent.name} capabilities`}>
+        <svg className="detail-connections" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
+          {topics.map((topic) => <line key={topic.label} x1="50" y1="38" x2={topic.x} y2={topic.y} />)}
+        </svg>
+
+        <div className="detail-center">
+          <span className="detail-star">✦</span>
+          <strong>{agent.name}</strong>
+          <small>{agent.note}</small>
+        </div>
+
+        {topics.map((topic) => (
+          <div key={topic.label} className={`detail-node ${topic.x > 50 ? "detail-node-left" : "detail-node-right"}`} style={{ left: `${topic.x}%`, top: `${topic.y}%` }}>
+            <span className="detail-dot" />
+            <strong>{topic.label}</strong>
+          </div>
+        ))}
+      </div>
+    </main>
+  );
+}
+
+function SecondaryPage({ type, onBack }) {
+  const studio = type === "Agent Studio";
+  return (
+    <main className="secondary">
+      <div className="secondary-art" aria-hidden="true">
+        <span className="big-asterisk">✳</span><span className="ring ring-a"/><span className="ring ring-b"/>
+      </div>
+      <span className="eyebrow">{studio ? "BUILD SOMETHING NEW" : "YOUR PERSONAL NETWORK"}</span>
+      <h1>{studio ? <>Shape an agent<br/><em>from scratch.</em></> : <>Your agents,<br/><em>all in one place.</em></>}</h1>
+      <p>{studio ? "Define a purpose, tune its personality, and connect the tools it needs." : "Agents you create and save will live here, ready whenever you need them."}</p>
+      <button className="primary-button" onClick={onBack}>{studio ? "Start creating" : "Discover agents"}<span>↗</span></button>
+    </main>
+  );
+}
+
+export default function Home() {
+  const [activeTab, setActiveTab] = useState("Agent Hub");
+  const [query, setQuery] = useState("");
+  const [selectedAgent, setSelectedAgent] = useState(null);
+
+  const changeTab = (tab) => {
+    setActiveTab(tab);
+    if (tab === "Agent Hub") setSelectedAgent(null);
+  };
+
+  return (
+    <div className="site-shell">
+      <header className="header">
+        <nav aria-label="Main navigation">
+          {tabs.map((tab) => <button key={tab} className={activeTab === tab ? "active" : ""} onClick={() => changeTab(tab)}>{tab}</button>)}
+        </nav>
+      </header>
+      {activeTab === "Agent Hub"
+        ? selectedAgent
+          ? <AgentDetail agent={selectedAgent} onBack={() => setSelectedAgent(null)} />
+          : <Network query={query} onPick={setQuery} onSelect={setSelectedAgent} />
+        : <SecondaryPage type={activeTab} onBack={() => changeTab("Agent Hub")} />}
+      <footer><span>AGENT HUB / 2026</span><span>Human needs, intelligent connections.</span></footer>
+    </div>
+  );
+}
