@@ -4,10 +4,10 @@ import { useMemo, useState } from "react";
 
 const agents = [
   { id: "health", name: "Health Agent", note: "Daily wellness", x: 13, y: 22, icon: "✦", labelSide: "right", points: [[5, 10], [4, 36]] },
-  { id: "roommate", name: "Roommate Agent", note: "Shared living", x: 13, y: 76, icon: "✦", labelSide: "right", points: [[5, 62], [6, 91]] },
+  { id: "roommate", name: "Roommate Agent", note: "Shared living", x: 13, y: 76, icon: "✦", labelSide: "right", points: [[5, 62], [6, 91], [50, 94]] },
   { id: "coffee", name: "Coffee Agent", note: "Coffee routine", x: 87, y: 18, icon: "✦", labelSide: "left", points: [[76, 7], [96, 34]] },
-  { id: "baby", name: "Baby Care", note: "Gentle routines", x: 88, y: 54, icon: "✦", labelSide: "left", points: [[77, 42], [97, 68]] },
-  { id: "music", name: "Music Agent", note: "Mood & sound", x: 79, y: 82, icon: "✦", labelSide: "left", points: [[68, 70], [93, 94]] },
+  { id: "baby", name: "Baby Care", note: "Gentle routines", x: 88, y: 54, icon: "✦", labelSide: "bottom", points: [[77, 42], [97, 40]] },
+  { id: "music", name: "Music Agent", note: "Mood & sound", x: 79, y: 82, icon: "✦", labelSide: "left", points: [[93, 94]] },
 ];
 
 const connectionDots = agents.flatMap((agent) => agent.points);
