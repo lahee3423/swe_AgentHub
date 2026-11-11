@@ -25,10 +25,10 @@ const topicPositions = [
 const tabs = ["Agent Hub", "My Agent", "Agent Studio"];
 
 const babyResults = [
-  { name: "Baby Care Agent", note: "A calm routine for everyday care.", features: ["Baby Monitor", "Air Purifier", "Night Light"] },
-  { name: "Baby Sleep Agent", note: "A gentler setup for better sleep.", features: ["White Noise", "Room Temperature", "Sleep Sensor"] },
-  { name: "Baby Watch Agent", note: "Keep important moments within reach.", features: ["Smart Camera", "Motion Alert", "Two-way Audio"] },
-  { name: "Growth Agent", note: "Follow changing needs as your baby grows.", features: ["Smart Scale", "Growth Log", "Daily Report"] },
+  { name: "Baby Care Agent", note: "A calm routine for everyday care.", features: ["Baby Monitor", "Air Purifier", "Night Light", "Bottle Warmer", "Smart Thermometer", "Diaper Sensor"] },
+  { name: "Baby Sleep Agent", note: "A gentler setup for better sleep.", features: ["White Noise Machine", "Room Thermostat", "Sleep Sensor", "Smart Crib", "Blackout Blinds", "Humidifier"] },
+  { name: "Baby Watch Agent", note: "Keep important moments within reach.", features: ["Smart Camera", "Motion Sensor", "Two-way Audio", "Door Sensor", "Cry Detector", "Wearable Monitor"] },
+  { name: "Growth Agent", note: "Follow changing needs as your baby grows.", features: ["Smart Scale", "Height Sensor", "Feeding Tracker", "Activity Mat", "Health Monitor", "Daily Report"] },
 ];
 
 function SearchIcon() {
