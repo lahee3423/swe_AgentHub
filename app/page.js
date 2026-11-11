@@ -3,17 +3,14 @@
 import { useMemo, useState } from "react";
 
 const agents = [
-  { id: "health", name: "Health Agent", note: "Daily wellness", x: 8.2, y: 13.7, icon: "✦", labelSide: "right" },
-  { id: "roommate", name: "Roommate Agent", note: "Shared living", x: 7, y: 82.3, icon: "✦", labelSide: "right" },
-  { id: "coffee", name: "Coffee Agent", note: "Coffee routine", x: 93.2, y: 10, icon: "✦", labelSide: "left" },
-  { id: "baby", name: "Baby Care", note: "Gentle routines", x: 92.8, y: 65.3, icon: "✦", labelSide: "left" },
-  { id: "music", name: "Music Agent", note: "Mood & sound", x: 90, y: 84.8, icon: "✦", labelSide: "left" },
+  { id: "health", name: "Health Agent", note: "Daily wellness", x: 13, y: 22, icon: "✦", labelSide: "right", points: [[5, 10], [24, 9], [4, 36]] },
+  { id: "roommate", name: "Roommate Agent", note: "Shared living", x: 13, y: 76, icon: "✦", labelSide: "right", points: [[5, 62], [25, 64], [6, 91]] },
+  { id: "coffee", name: "Coffee Agent", note: "Coffee routine", x: 87, y: 18, icon: "✦", labelSide: "left", points: [[76, 7], [96, 6], [96, 34]] },
+  { id: "baby", name: "Baby Care", note: "Gentle routines", x: 88, y: 54, icon: "✦", labelSide: "left", points: [[77, 42], [97, 40], [97, 68]] },
+  { id: "music", name: "Music Agent", note: "Mood & sound", x: 79, y: 82, icon: "✦", labelSide: "left", points: [[68, 70], [93, 70], [68, 94], [93, 94]] },
 ];
 
-const connectionDots = [
-  [13, 29], [19.5, 12.1], [9.2, 59.7], [18.8, 46.1], [84.2, 19.4],
-  [87.4, 48.1], [78, 60.6], [73.8, 78.4], [65.5, 91.9],
-];
+const connectionDots = agents.flatMap((agent) => agent.points);
 
 const agentTopics = {
   health: ["Cardiology", "Pulmonology", "Nephrology", "Orthopedics", "Patient Info", "Room Agent"],
@@ -46,13 +43,14 @@ function Network({ query, onPick, onSelect }) {
 
   return (
     <div className="network" aria-label="Agent network">
-      <svg className="connections" viewBox="0 0 1000 620" aria-hidden="true" preserveAspectRatio="none">
-        <path d="M498 305 L130 180 L82 85 M130 180 L195 75 M130 180 L92 370 L70 510 M92 370 L188 286" />
-        <path d="M498 305 L842 120 L932 62 M842 120 L874 298 L928 405 M874 298 L780 376 M498 305 L738 486 L900 526 M738 486 L655 570" />
+      <svg className="connections" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
+        {agents.flatMap((agent) => agent.points.map(([x, y]) => (
+          <line key={`${agent.id}-${x}-${y}`} x1={agent.x} y1={agent.y} x2={x} y2={y} />
+        )))}
       </svg>
 
       {connectionDots.map(([x, y], index) => (
-        <span key={`${x}-${y}`} className={`connection-dot ${index === 0 || index === 3 || index === 6 || index === 8 || index === 11 ? "connection-dot-large" : ""}`} style={{ left: `${x}%`, top: `${y}%` }} aria-hidden="true" />
+        <span key={`${x}-${y}`} className={`connection-dot ${index % 3 === 0 ? "connection-dot-large" : ""}`} style={{ left: `${x}%`, top: `${y}%` }} aria-hidden="true" />
       ))}
 
       <div className="hub-core">
