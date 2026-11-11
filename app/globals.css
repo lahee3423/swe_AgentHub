@@ -106,6 +106,7 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .detail-connections { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -3; }
 .detail-connections line { stroke: var(--line); stroke-width: .23; vector-effect: non-scaling-stroke; }
 .detail-center { position: absolute; left: 50%; top: 38%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; text-align: center; }
+.hospital-detail-center { transform: translate(-50%, -29px); }
 .detail-star { font-size: 58px; line-height: .9; color: var(--accent); }
 .detail-center strong { margin-top: 12px; font-size: 21px; }
 .detail-center small { margin-top: 5px; color: var(--gray); font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; font-weight: 700; }
@@ -163,6 +164,7 @@ footer { height: 44px; padding: 0 3.5vw; display: flex; align-items: center; jus
   .detail-network { min-height: 650px; }
   .detail-network::before { width: 82vw; top: 38%; }
   .detail-center { top: 38%; }
+  .hospital-detail-center { transform: translate(-50%, -24px); }
   .detail-star { font-size: 48px; }
   .detail-center strong { font-size: 18px; }
   .detail-node strong { font-size: 11px; }

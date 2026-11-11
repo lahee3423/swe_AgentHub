@@ -214,7 +214,7 @@ function AgentDetail({ agent, onBack }) {
           {topics.map((topic) => <line key={topic.label} x1="50" y1="38" x2={topic.x} y2={topic.y} />)}
         </svg>
 
-        <div className="detail-center">
+        <div className={`detail-center ${agent.id === "health" ? "hospital-detail-center" : ""}`}>
           <span className="detail-star">✦</span>
           <strong>{agent.name}</strong>
           <small>{agent.note}</small>
