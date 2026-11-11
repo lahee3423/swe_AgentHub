@@ -3,17 +3,16 @@
 import { useMemo, useState } from "react";
 
 const agents = [
-  { id: "health", name: "Health Agent", note: "Daily wellness", x: 13, y: 29, icon: "✦" },
-  { id: "roommate", name: "Roommate Agent", note: "Shared living", x: 10, y: 72, icon: "✦" },
-  { id: "coffee", name: "Coffee Agent", note: "Coffee routine", x: 84, y: 19, icon: "✦" },
-  { id: "baby", name: "Baby Care", note: "Gentle routines", x: 86, y: 47, icon: "✦" },
-  { id: "music", name: "Music Agent", note: "Mood & sound", x: 74, y: 72, icon: "✦" },
+  { id: "health", name: "Health Agent", note: "Daily wellness", x: 8.2, y: 13.7, icon: "✦", labelSide: "right" },
+  { id: "roommate", name: "Roommate Agent", note: "Shared living", x: 7, y: 82.3, icon: "✦", labelSide: "right" },
+  { id: "coffee", name: "Coffee Agent", note: "Coffee routine", x: 93.2, y: 10, icon: "✦", labelSide: "left" },
+  { id: "baby", name: "Baby Care", note: "Gentle routines", x: 92.8, y: 65.3, icon: "✦", labelSide: "left" },
+  { id: "music", name: "Music Agent", note: "Mood & sound", x: 90, y: 84.8, icon: "✦", labelSide: "left" },
 ];
 
 const connectionDots = [
-  [13, 29], [8.2, 13.7], [19.5, 12.1], [9.2, 59.7], [7, 82.3], [18.8, 46.1],
-  [84.2, 19.4], [93.2, 10], [87.4, 48.1], [92.8, 65.3], [78, 60.6], [73.8, 78.4],
-  [90, 84.8], [65.5, 91.9],
+  [13, 29], [19.5, 12.1], [9.2, 59.7], [18.8, 46.1], [84.2, 19.4],
+  [87.4, 48.1], [78, 60.6], [73.8, 78.4], [65.5, 91.9],
 ];
 
 const tabs = ["Agent Hub", "My Agent", "Agent Studio"];
@@ -58,7 +57,7 @@ function Network({ query, onPick }) {
       {agents.map((agent) => {
         const hidden = query && !matches.some((match) => match.id === agent.id);
         return (
-          <button key={agent.id} className={`agent-node ${hidden ? "is-muted" : ""}`} style={{ left: `${agent.x}%`, top: `${agent.y}%` }} onClick={() => onPick(agent.name)}>
+          <button key={agent.id} className={`agent-node label-${agent.labelSide} ${hidden ? "is-muted" : ""}`} style={{ left: `${agent.x}%`, top: `${agent.y}%` }} onClick={() => onPick(agent.name)}>
             <span className="agent-symbol">{agent.icon}</span>
             <span className="agent-copy"><strong>{agent.name}</strong><small>{agent.note}</small></span>
           </button>
