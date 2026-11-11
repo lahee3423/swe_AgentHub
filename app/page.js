@@ -28,7 +28,7 @@ const babyResults = [
   { name: "Baby Care Agent", note: "A calm routine for everyday care.", features: ["Baby Monitor", "Air Purifier", "Night Light"] },
   { name: "Baby Sleep Agent", note: "A gentler setup for better sleep.", features: ["White Noise", "Room Temperature", "Sleep Sensor"] },
   { name: "Baby Watch Agent", note: "Keep important moments within reach.", features: ["Smart Camera", "Motion Alert", "Two-way Audio"] },
-  { name: "Growth Agent", note: "Follow changing needs as your baby grows.", features: ["Smart Scale", "Growth Log", "Daily Report"], featured: true },
+  { name: "Growth Agent", note: "Follow changing needs as your baby grows.", features: ["Smart Scale", "Growth Log", "Daily Report"] },
 ];
 
 function SearchIcon() {
@@ -149,7 +149,7 @@ function SearchResults({ query, onPick, onSearch, onBack }) {
 
       <section className="result-cards" aria-label="Baby agent search results">
         {babyResults.map((result) => (
-          <article key={result.name} className={`result-card ${result.featured ? "is-featured" : ""}`}>
+          <article key={result.name} className="result-card">
             <span className="result-symbol" aria-hidden="true">✦</span>
             <h2>{result.name}</h2>
             <p>{result.note}</p>
