@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const agents = [
   { id: "health", name: "Health Agent", note: "Daily wellness", x: 18, y: 22, icon: "✦", labelSide: "right", points: [[5, 10], [4, 36]] },
@@ -9,8 +9,6 @@ const agents = [
   { id: "baby", name: "Baby Care", note: "Gentle routines", x: 88, y: 54, icon: "✦", labelSide: "bottom", points: [[77, 42], [97, 40]] },
   { id: "music", name: "Music Agent", note: "Mood & sound", x: 79, y: 82, icon: "✦", labelSide: "left", points: [[93, 94]] },
 ];
-
-const connectionDots = agents.flatMap((agent) => agent.points);
 
 const agentTopics = {
   health: ["Cardiology", "Pulmonology", "Nephrology", "Orthopedics", "Patient Info", "Room Agent"],
@@ -36,34 +34,66 @@ function SearchIcon() {
 }
 
 function Network({ query, onPick, onSelect }) {
+  const [motionTime, setMotionTime] = useState(0);
   const matches = useMemo(
     () => agents.filter((agent) => `${agent.name} ${agent.note}`.toLowerCase().includes(query.toLowerCase())),
     [query]
   );
 
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+
+    let animationFrame;
+    let lastUpdate = 0;
+    const startedAt = performance.now();
+
+    const animate = (now) => {
+      if (now - lastUpdate >= 33) {
+        setMotionTime((now - startedAt) / 1000);
+        lastUpdate = now;
+      }
+      animationFrame = requestAnimationFrame(animate);
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, []);
+
+  const movingAgents = useMemo(() => agents.map((agent, agentIndex) => {
+    const agentPhase = motionTime * .48 + agentIndex * 1.37;
+    return {
+      ...agent,
+      movingX: agent.x + Math.sin(agentPhase) * .28,
+      movingY: agent.y + Math.cos(agentPhase * .86) * .22,
+      movingPoints: agent.points.map(([x, y], pointIndex) => {
+        const pointPhase = motionTime * (.5 + pointIndex * .07) + agentIndex * 1.61 + pointIndex * .83;
+        return [x + Math.sin(pointPhase) * .45, y + Math.cos(pointPhase * .91) * .35];
+      }),
+    };
+  }), [motionTime]);
+
+  const movingDots = movingAgents.flatMap((agent) => agent.movingPoints.map(([x, y], pointIndex) => ({
+    key: `${agent.id}-${pointIndex}`,
+    x,
+    y,
+  })));
+
   return (
     <div className="network" aria-label="Agent network">
       <svg className="connections" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
-        {agents.map((agent) => (
-          <line key={`${agent.id}-hub`} className="hub-connection" x1={agent.x} y1={agent.y} x2="50" y2="53" />
+        {movingAgents.map((agent) => (
+          <line key={`${agent.id}-hub`} className="hub-connection" x1={agent.movingX} y1={agent.movingY} x2="50" y2="53" />
         ))}
-        {agents.flatMap((agent) => agent.points.map(([x, y]) => (
-          <line key={`${agent.id}-${x}-${y}`} x1={agent.x} y1={agent.y} x2={x} y2={y} />
+        {movingAgents.flatMap((agent) => agent.movingPoints.map(([x, y], pointIndex) => (
+          <line key={`${agent.id}-${pointIndex}`} x1={agent.movingX} y1={agent.movingY} x2={x} y2={y} />
         )))}
       </svg>
 
-      {connectionDots.map(([x, y], index) => (
+      {movingDots.map((dot, index) => (
         <span
-          key={`${x}-${y}`}
+          key={dot.key}
           className={`connection-dot ${index % 3 === 0 ? "connection-dot-large" : ""}`}
-          style={{
-            left: `${x}%`,
-            top: `${y}%`,
-            "--float-x": `${[-4, 3, 2, -3, 4][index % 5]}px`,
-            "--float-y": `${[3, -4, 4, -2, 2][index % 5]}px`,
-            "--float-duration": `${4.8 + (index % 4) * .7}s`,
-            "--float-delay": `${index * -.35}s`,
-          }}
+          style={{ left: `${dot.x}%`, top: `${dot.y}%` }}
           aria-hidden="true"
         />
       ))}
@@ -79,10 +109,10 @@ function Network({ query, onPick, onSelect }) {
         <p>{query ? `${matches.length} agent${matches.length === 1 ? "" : "s"} found in the network` : "Explore a network of agents built around your life."}</p>
       </div>
 
-      {agents.map((agent) => {
+      {movingAgents.map((agent) => {
         const hidden = query && !matches.some((match) => match.id === agent.id);
         return (
-          <button key={agent.id} className={`agent-node label-${agent.labelSide} ${hidden ? "is-muted" : ""}`} style={{ left: `${agent.x}%`, top: `${agent.y}%` }} onClick={() => onSelect(agent)}>
+          <button key={agent.id} className={`agent-node label-${agent.labelSide} ${hidden ? "is-muted" : ""}`} style={{ left: `${agent.movingX}%`, top: `${agent.movingY}%` }} onClick={() => onSelect(agent)}>
             <span className="agent-symbol">{agent.icon}</span>
             <span className="agent-copy"><strong>{agent.name}</strong><small>{agent.note}</small></span>
           </button>
