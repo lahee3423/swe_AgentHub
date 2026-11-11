@@ -29,6 +29,8 @@ const babyResults = [
   { name: "Baby Sleep Agent", note: "A gentler setup for better sleep.", features: ["White Noise Machine", "Room Thermostat", "Sleep Sensor", "Smart Crib", "Blackout Blinds", "Humidifier"] },
   { name: "Baby Watch Agent", note: "Keep important moments within reach.", features: ["Smart Camera", "Motion Sensor", "Two-way Audio", "Door Sensor", "Cry Detector", "Wearable Monitor"] },
   { name: "Growth Agent", note: "Follow changing needs as your baby grows.", features: ["Smart Scale", "Height Sensor", "Feeding Tracker", "Activity Mat", "Health Monitor", "Daily Report"] },
+  { name: "Baby Feeding Agent", note: "Make every feeding routine easier to follow.", features: ["Bottle Warmer", "Formula Maker", "Feeding Tracker", "Smart Kettle", "Milk Monitor", "Kitchen Light"] },
+  { name: "Baby Safety Agent", note: "Watch over the spaces your baby explores.", features: ["Smart Gate", "Window Sensor", "Outlet Monitor", "Air Quality Sensor", "Room Camera", "Emergency Button"] },
 ];
 
 function SearchIcon() {
@@ -138,6 +140,13 @@ function Network({ query, onPick, onSearch, onSelect }) {
 }
 
 function SearchResults({ query, onPick, onSearch, onBack }) {
+  const [carouselStep, setCarouselStep] = useState(0);
+  const activeResult = carouselStep % babyResults.length;
+
+  const showNextResult = () => {
+    setCarouselStep((current) => current + 1);
+  };
+
   return (
     <main className="search-results">
       <div className="results-toolbar">
@@ -154,20 +163,24 @@ function SearchResults({ query, onPick, onSearch, onBack }) {
         <h1>Agents for “{query || "baby"}”</h1>
       </div>
 
-      <section className="result-cards" aria-label="Baby agent search results">
-        {babyResults.map((result) => (
-          <article key={result.name} className="result-card">
-            <span className="result-symbol" aria-hidden="true">✦</span>
-            <h2>{result.name}</h2>
-            <p>{result.note}</p>
-            <ul>
-              {result.features.map((feature) => <li key={feature}>{feature}</li>)}
-            </ul>
-          </article>
-        ))}
+      <section className="result-carousel" aria-label="Baby agent search results" aria-roledescription="carousel">
+        <div className="carousel-ring" style={{ "--carousel-turn": `${carouselStep * -60}deg` }}>
+          {babyResults.map((result, index) => (
+            <div key={result.name} className="carousel-item" style={{ "--card-angle": `${index * 60}deg` }} aria-hidden={index !== activeResult}>
+              <article className="result-card">
+                <span className="result-symbol" aria-hidden="true">✦</span>
+                <h2>{result.name}</h2>
+                <p>{result.note}</p>
+                <ul>
+                  {result.features.map((feature) => <li key={feature}>{feature}</li>)}
+                </ul>
+              </article>
+            </div>
+          ))}
+        </div>
       </section>
 
-      <button className="results-next" type="button" aria-label="Next results">→</button>
+      <button className="results-next" type="button" onClick={showNextResult} aria-label={`Show next agent after ${babyResults[activeResult].name}`}>→</button>
     </main>
   );
 }
