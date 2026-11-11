@@ -33,19 +33,14 @@ nav button:hover::after, nav button.active::after { transform: scaleX(1); }
 .network { min-height: calc(100svh - 102px); flex: 1; position: relative; isolation: isolate; }
 .connections { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -3; }
 .connections path { fill: none; stroke: var(--line); stroke-width: 1.1; vector-effect: non-scaling-stroke; }
-.connection-dots { fill: var(--gray); }
-
-.orbital { position: absolute; left: 50%; top: 50%; border: 1px solid rgba(165, 0, 52, .28); border-radius: 48% 52% 46% 54%; transform: translate(-50%, -50%) rotate(-8deg); z-index: -2; }
-.orbital-one { width: min(52vw, 720px); aspect-ratio: 1.12; }
-.orbital-two { width: min(45vw, 630px); aspect-ratio: 1.18; transform: translate(-50%, -50%) rotate(9deg); border-color: rgba(165, 0, 52, .2); }
-.orbital-three { width: min(37vw, 520px); aspect-ratio: 1; transform: translate(-50%, -50%) rotate(-17deg); border-color: rgba(165, 0, 52, .14); }
+.connection-dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--gray); transform: translate(-50%, -50%); z-index: -2; }
+.connection-dot-large { width: 10px; height: 10px; }
 
 .hub-core {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(38vw, 540px); aspect-ratio: 1;
-  background: var(--accent-soft); border-radius: 47% 53% 50% 50% / 52% 46% 54% 48%; display: flex; flex-direction: column;
-  justify-content: center; align-items: center; text-align: center; padding: 55px; box-shadow: 0 0 0 22px rgba(165, 0, 52, .09), 0 0 0 45px rgba(165, 0, 52, .05);
+  background: radial-gradient(circle at 50% 48%, rgba(165, 0, 52, .24) 0%, rgba(165, 0, 52, .18) 48%, rgba(165, 0, 52, .1) 72%, rgba(165, 0, 52, 0) 100%);
+  border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 55px;
 }
-.hub-core::before { content: ""; position: absolute; inset: 9%; border: 1px solid rgba(23,24,23,.14); border-radius: 50%; transform: rotate(13deg); }
 .eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 3px; position: relative; z-index: 2; }
 h1 { margin: 14px 0 22px; font-size: clamp(40px, 4.15vw, 68px); line-height: .9; letter-spacing: -4px; position: relative; z-index: 2; }
 h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
@@ -82,7 +77,6 @@ footer { height: 44px; padding: 0 3.5vw; display: flex; align-items: center; jus
   .header { padding: 0 22px; }
   .network { min-height: 760px; }
   .hub-core { width: min(72vw, 530px); }
-  .orbital-one { width: 82vw; }.orbital-two { width: 72vw; }.orbital-three { width: 62vw; }
   .agent-node:nth-of-type(1) { left: 15% !important; top: 19% !important; }
   .agent-node:nth-of-type(2) { left: 17% !important; top: 82% !important; }
   .agent-node:nth-of-type(3) { left: 83% !important; top: 17% !important; }
@@ -101,7 +95,6 @@ footer { height: 44px; padding: 0 3.5vw; display: flex; align-items: center; jus
   .hub-core p { font-size: 10px; }
   .search { height: 51px; }
   .search button { width: 39px; height: 39px; }
-  .orbital-one { width: 105vw; top: 45%; }.orbital-two { width: 94vw; top: 45%; }.orbital-three { width: 83vw; top: 45%; }
   .agent-node { gap: 4px; }
   .agent-symbol { width: 26px; font-size: 22px; }
   .agent-copy small { display: none; }.agent-copy strong { font-size: 12px; }

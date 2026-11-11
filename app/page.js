@@ -10,6 +10,12 @@ const agents = [
   { id: "music", name: "Music Agent", note: "Mood & sound", x: 74, y: 72, icon: "✦" },
 ];
 
+const connectionDots = [
+  [13, 29], [8.2, 13.7], [19.5, 12.1], [9.2, 59.7], [7, 82.3], [18.8, 46.1],
+  [84.2, 19.4], [93.2, 10], [87.4, 48.1], [92.8, 65.3], [78, 60.6], [73.8, 78.4],
+  [90, 84.8], [65.5, 91.9],
+];
+
 const tabs = ["Agent Hub", "My Agent", "Agent Studio"];
 
 function SearchIcon() {
@@ -32,15 +38,11 @@ function Network({ query, onPick }) {
       <svg className="connections" viewBox="0 0 1000 620" aria-hidden="true" preserveAspectRatio="none">
         <path d="M498 305 L130 180 L82 85 M130 180 L195 75 M130 180 L92 370 L70 510 M92 370 L188 286" />
         <path d="M498 305 L842 120 L932 62 M842 120 L874 298 L928 405 M874 298 L780 376 M498 305 L738 486 L900 526 M738 486 L655 570" />
-        <g className="connection-dots">
-          <circle cx="130" cy="180" r="5"/><circle cx="82" cy="85" r="4"/><circle cx="195" cy="75" r="4"/>
-          <circle cx="92" cy="370" r="5"/><circle cx="70" cy="510" r="4"/><circle cx="188" cy="286" r="4"/>
-          <circle cx="842" cy="120" r="5"/><circle cx="932" cy="62" r="4"/><circle cx="874" cy="298" r="5"/>
-          <circle cx="928" cy="405" r="4"/><circle cx="780" cy="376" r="4"/><circle cx="738" cy="486" r="5"/><circle cx="900" cy="526" r="4"/><circle cx="655" cy="570" r="4"/>
-        </g>
       </svg>
 
-      <div className="orbital orbital-one" /><div className="orbital orbital-two" /><div className="orbital orbital-three" />
+      {connectionDots.map(([x, y], index) => (
+        <span key={`${x}-${y}`} className={`connection-dot ${index === 0 || index === 3 || index === 6 || index === 8 || index === 11 ? "connection-dot-large" : ""}`} style={{ left: `${x}%`, top: `${y}%` }} aria-hidden="true" />
+      ))}
 
       <div className="hub-core">
         <span className="eyebrow">FIND YOUR PERFECT AGENT</span>
