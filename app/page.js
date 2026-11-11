@@ -43,8 +43,8 @@ function Network({ query, onPick }) {
       <div className="orbital orbital-one" /><div className="orbital orbital-two" /><div className="orbital orbital-three" />
 
       <div className="hub-core">
-        <span className="eyebrow">THE AGENT NETWORK</span>
-        <h1>Find your<br /><em>perfect agent.</em></h1>
+        <span className="eyebrow">FIND YOUR PERFECT AGENT</span>
+        <h1>Agent Hubs</h1>
         <form className="search" onSubmit={(event) => event.preventDefault()}>
           <label className="sr-only" htmlFor="agent-search">Search agents</label>
           <input id="agent-search" value={query} onChange={(event) => onPick(event.target.value)} placeholder="What do you need help with?" />
