@@ -4,9 +4,9 @@ import { useMemo, useState } from "react";
 
 const agents = [
   { id: "health", name: "Health Agent", note: "Daily wellness", x: 13, y: 29, icon: "✦" },
-  { id: "roommate", name: "Roommate Agent", note: "Shared living", x: 10, y: 72, icon: "✳" },
+  { id: "roommate", name: "Roommate Agent", note: "Shared living", x: 10, y: 72, icon: "✦" },
   { id: "coffee", name: "Coffee Agent", note: "Coffee routine", x: 84, y: 19, icon: "✦" },
-  { id: "baby", name: "Baby Care", note: "Gentle routines", x: 86, y: 47, icon: "✳" },
+  { id: "baby", name: "Baby Care", note: "Gentle routines", x: 86, y: 47, icon: "✦" },
   { id: "music", name: "Music Agent", note: "Mood & sound", x: 74, y: 72, icon: "✦" },
 ];
 
