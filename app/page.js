@@ -264,7 +264,13 @@ export default function Home() {
     <div className="site-shell">
       <header className="header">
         <nav aria-label="Main navigation">
-          {tabs.map((tab) => <button key={tab} className={activeTab === tab ? "active" : ""} onClick={() => changeTab(tab)}>{tab}</button>)}
+          {tabs.map((tab) => (
+            <button key={tab} className={activeTab === tab ? "active" : ""} onClick={() => changeTab(tab)}>
+              {tab === "Agent Hub" && selectedAgent
+                ? <span className="tab-breadcrumb"><span>Agent Hub</span><span aria-hidden="true">&gt;</span><span>{selectedAgent.name}</span></span>
+                : tab}
+            </button>
+          ))}
         </nav>
       </header>
       {activeTab === "Agent Hub"
