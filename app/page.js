@@ -142,7 +142,7 @@ function Network({ query, onPick, onSearch, onSelect }) {
 function SearchResults({ query, onPick, onSearch, onBack }) {
   const [carouselStep, setCarouselStep] = useState(0);
   const [isSliding, setIsSliding] = useState(false);
-  const visibleResults = Array.from({ length: 7 }, (_, index) => babyResults[(carouselStep + index) % babyResults.length]);
+  const visibleResults = Array.from({ length: 6 }, (_, index) => babyResults[(carouselStep + index) % babyResults.length]);
 
   const showNextResult = () => {
     if (!isSliding) setIsSliding(true);
@@ -174,7 +174,7 @@ function SearchResults({ query, onPick, onSearch, onBack }) {
       <section className="result-carousel" aria-label="Baby agent search results" aria-roledescription="carousel">
         <div className={`carousel-track ${isSliding ? "is-sliding" : ""}`} onTransitionEnd={finishSlide}>
           {visibleResults.map((result, index) => (
-            <div key={`${carouselStep}-${index}-${result.name}`} className={`carousel-card ${index === 0 ? "edge-left" : ""} ${index === 5 ? "edge-right" : ""}`} aria-hidden={index === 6}>
+            <div key={`${carouselStep}-${index}-${result.name}`} className={`carousel-card ${index === 0 ? "edge-left" : ""} ${index === 4 ? "edge-right" : ""}`} aria-hidden={index === 5}>
               <article className="result-card">
                 <span className="result-symbol" aria-hidden="true">✦</span>
                 <h2>{result.name}</h2>
