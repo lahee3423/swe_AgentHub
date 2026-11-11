@@ -23,7 +23,7 @@ const topicPositions = [
 ];
 
 const hospitalTopicPositions = [
-  [28, 30], [72, 30], [50, 80],
+  [24, 22], [76, 22], [50, 84],
 ];
 
 const tabs = ["Agent Hub", "My Agent", "Agent Studio"];
