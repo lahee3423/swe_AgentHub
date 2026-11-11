@@ -141,10 +141,18 @@ function Network({ query, onPick, onSearch, onSelect }) {
 
 function SearchResults({ query, onPick, onSearch, onBack }) {
   const [carouselStep, setCarouselStep] = useState(0);
-  const activeResult = carouselStep % babyResults.length;
+  const [isSliding, setIsSliding] = useState(false);
+  const visibleResults = Array.from({ length: 7 }, (_, index) => babyResults[(carouselStep + index) % babyResults.length]);
 
   const showNextResult = () => {
+    if (!isSliding) setIsSliding(true);
+  };
+
+  const finishSlide = (event) => {
+    if (event.target !== event.currentTarget) return;
+    if (!isSliding) return;
     setCarouselStep((current) => current + 1);
+    setIsSliding(false);
   };
 
   return (
@@ -164,9 +172,9 @@ function SearchResults({ query, onPick, onSearch, onBack }) {
       </div>
 
       <section className="result-carousel" aria-label="Baby agent search results" aria-roledescription="carousel">
-        <div className="carousel-ring" style={{ "--carousel-turn": `${carouselStep * -60}deg` }}>
-          {babyResults.map((result, index) => (
-            <div key={result.name} className="carousel-item" style={{ "--card-angle": `${index * 60}deg` }} aria-hidden={index !== activeResult}>
+        <div className={`carousel-track ${isSliding ? "is-sliding" : ""}`} onTransitionEnd={finishSlide}>
+          {visibleResults.map((result, index) => (
+            <div key={`${carouselStep}-${index}-${result.name}`} className={`carousel-card ${index === 0 ? "edge-left" : ""} ${index === 5 ? "edge-right" : ""}`} aria-hidden={index === 6}>
               <article className="result-card">
                 <span className="result-symbol" aria-hidden="true">✦</span>
                 <h2>{result.name}</h2>
@@ -180,7 +188,7 @@ function SearchResults({ query, onPick, onSearch, onBack }) {
         </div>
       </section>
 
-      <button className="results-next" type="button" onClick={showNextResult} aria-label={`Show next agent after ${babyResults[activeResult].name}`}>→</button>
+      <button className="results-next" type="button" onClick={showNextResult} disabled={isSliding} aria-label="Show next agent cards">→</button>
     </main>
   );
 }
