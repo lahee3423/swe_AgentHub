@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 const agents = [
-  { id: "health", name: "Health Agent", note: "Daily wellness", x: 18, y: 22, icon: "✦", labelSide: "right", points: [[5, 10], [4, 36]] },
+  { id: "health", name: "Health Agent", note: "Daily wellness", x: 22, y: 22, icon: "✦", labelSide: "right", points: [[5, 10], [4, 36]] },
   { id: "roommate", name: "Roommate Agent", note: "Shared living", x: 18, y: 76, icon: "✦", labelSide: "right", points: [[5, 62], [6, 91], [50, 94]] },
   { id: "coffee", name: "Coffee Agent", note: "Coffee routine", x: 87, y: 18, icon: "✦", labelSide: "left", points: [[76, 7], [96, 34]] },
   { id: "baby", name: "Baby Care", note: "Gentle routines", x: 88, y: 54, icon: "✦", labelSide: "bottom", points: [[77, 42], [97, 40]] },
@@ -67,7 +67,7 @@ function Network({ query, onPick, onSelect }) {
       movingY: agent.y + Math.cos(agentPhase * .86) * .22,
       movingPoints: agent.points.map(([x, y], pointIndex) => {
         const pointPhase = motionTime * (.5 + pointIndex * .07) + agentIndex * 1.61 + pointIndex * .83;
-        return [x + Math.sin(pointPhase) * .45, y + Math.cos(pointPhase * .91) * .35];
+        return [x + Math.sin(pointPhase) * .9, y + Math.cos(pointPhase * .91) * .7];
       }),
     };
   }), [motionTime]);
