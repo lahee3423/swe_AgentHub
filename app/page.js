@@ -45,7 +45,7 @@ function Network({ query, onPick, onSelect }) {
     <div className="network" aria-label="Agent network">
       <svg className="connections" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
         {agents.map((agent) => (
-          <line key={`${agent.id}-hub`} className="hub-connection" x1={agent.x} y1={agent.y} x2="50" y2="50" />
+          <line key={`${agent.id}-hub`} className="hub-connection" x1={agent.x} y1={agent.y} x2="50" y2="53" />
         ))}
         {agents.flatMap((agent) => agent.points.map(([x, y]) => (
           <line key={`${agent.id}-${x}-${y}`} x1={agent.x} y1={agent.y} x2={x} y2={y} />
@@ -53,7 +53,19 @@ function Network({ query, onPick, onSelect }) {
       </svg>
 
       {connectionDots.map(([x, y], index) => (
-        <span key={`${x}-${y}`} className={`connection-dot ${index % 3 === 0 ? "connection-dot-large" : ""}`} style={{ left: `${x}%`, top: `${y}%` }} aria-hidden="true" />
+        <span
+          key={`${x}-${y}`}
+          className={`connection-dot ${index % 3 === 0 ? "connection-dot-large" : ""}`}
+          style={{
+            left: `${x}%`,
+            top: `${y}%`,
+            "--float-x": `${[-4, 3, 2, -3, 4][index % 5]}px`,
+            "--float-y": `${[3, -4, 4, -2, 2][index % 5]}px`,
+            "--float-duration": `${4.8 + (index % 4) * .7}s`,
+            "--float-delay": `${index * -.35}s`,
+          }}
+          aria-hidden="true"
+        />
       ))}
 
       <div className="hub-core">
