@@ -65,6 +65,27 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .agent-copy strong { font-family: inherit; font-size: 16px; font-style: normal; font-weight: 700; }
 .agent-copy small { margin-top: 3px; color: var(--gray); text-transform: uppercase; letter-spacing: 1.6px; font-size: 8px; font-weight: 700; }
 
+.search-results { min-height: calc(100svh - 102px); flex: 1; position: relative; padding: 28px 5vw 60px; overflow: hidden; background: rgba(165, 0, 52, .12); }
+.results-toolbar { width: min(680px, 100%); margin: 0 auto; display: grid; grid-template-columns: 46px 1fr 46px; gap: 14px; align-items: center; }
+.results-back, .results-next { border: 1.5px solid var(--ink); border-radius: 50%; background: rgba(255,255,255,.72); cursor: pointer; display: grid; place-items: center; font-size: 22px; font-weight: 700; }
+.results-back { width: 46px; height: 46px; }
+.results-search { grid-column: 2; height: 52px; padding: 5px 5px 5px 20px; display: flex; align-items: center; background: var(--white); border: 1.5px solid var(--ink); border-radius: 50px; box-shadow: 5px 5px 0 rgba(38,38,38,.1); }
+.results-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; font-size: 14px; font-weight: 650; }
+.results-search button { width: 40px; height: 40px; flex: 0 0 auto; border: 0; border-radius: 50%; background: var(--accent); display: grid; place-items: center; cursor: pointer; }
+.results-search svg { width: 17px; fill: none; stroke: var(--white); stroke-width: 1.8; }
+.results-heading { margin: 46px auto 28px; text-align: center; }
+.results-heading h1 { margin: 12px 0 0; font-size: clamp(34px, 4vw, 58px); letter-spacing: -3px; }
+.result-cards { width: min(1180px, 100%); margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.result-card { min-height: 370px; padding: 32px 25px 26px; border: 1px solid rgba(38,38,38,.18); border-radius: 28px; background: rgba(255,255,255,.38); backdrop-filter: blur(12px); box-shadow: 0 18px 40px rgba(38,38,38,.06); }
+.result-card.is-featured { background: rgba(255,255,255,.82); transform: translateY(-12px); box-shadow: 0 22px 50px rgba(165,0,52,.1); }
+.result-symbol { display: block; font-size: 35px; line-height: 1; }
+.result-card h2 { min-height: 54px; margin: 18px 0 12px; font-size: 22px; line-height: 1.1; letter-spacing: -.7px; }
+.result-card p { min-height: 54px; margin: 0 0 24px; color: var(--gray); font-size: 13px; line-height: 1.55; }
+.result-card ul { margin: 0; padding: 20px 0 0; border-top: 1px solid rgba(38,38,38,.15); list-style: none; }
+.result-card li { position: relative; margin: 13px 0; padding-left: 20px; font-size: 12px; font-weight: 650; }
+.result-card li::before { content: ""; position: absolute; left: 0; top: 50%; width: 8px; height: 8px; border: 1.5px solid var(--accent); border-radius: 50%; transform: translateY(-50%); }
+.results-next { position: absolute; right: 2.2vw; top: 54%; width: 50px; height: 50px; background: transparent; }
+
 .agent-detail { min-height: calc(100svh - 102px); flex: 1; display: flex; flex-direction: column; padding: 30px 3.5vw 24px; }
 .detail-bar { min-height: 52px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; position: relative; z-index: 5; }
 .detail-back, .detail-launch { border: 0; background: transparent; cursor: pointer; font-weight: 750; }
@@ -139,6 +160,17 @@ footer { height: 44px; padding: 0 3.5vw; display: flex; align-items: center; jus
   .secondary { min-height: calc(100svh - 54px); padding: 10vh 28px 100px; }
   .secondary h1 { font-size: 52px; letter-spacing: -3px; }
   .secondary-art { width: 96vw; opacity: .65; right: -43vw; }
+  .search-results { min-height: calc(100svh - 54px); padding: 22px 20px 54px; overflow-y: auto; }
+  .results-toolbar { grid-template-columns: 40px 1fr; gap: 10px; }
+  .results-back { width: 40px; height: 40px; font-size: 19px; }
+  .results-search { height: 46px; }
+  .results-search button { width: 36px; height: 36px; }
+  .results-heading { margin: 34px auto 24px; }
+  .results-heading h1 { font-size: 35px; letter-spacing: -2px; }
+  .result-cards { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(76vw, 300px); gap: 14px; padding: 12px 2px 22px; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .result-card { min-height: 350px; padding: 28px 22px; scroll-snap-align: start; }
+  .result-card.is-featured { transform: none; }
+  .results-next { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }

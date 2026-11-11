@@ -24,6 +24,13 @@ const topicPositions = [
 
 const tabs = ["Agent Hub", "My Agent", "Agent Studio"];
 
+const babyResults = [
+  { name: "Baby Care Agent", note: "A calm routine for everyday care.", features: ["Baby Monitor", "Air Purifier", "Night Light"] },
+  { name: "Baby Sleep Agent", note: "A gentler setup for better sleep.", features: ["White Noise", "Room Temperature", "Sleep Sensor"] },
+  { name: "Baby Watch Agent", note: "Keep important moments within reach.", features: ["Smart Camera", "Motion Alert", "Two-way Audio"] },
+  { name: "Growth Agent", note: "Follow changing needs as your baby grows.", features: ["Smart Scale", "Growth Log", "Daily Report"], featured: true },
+];
+
 function SearchIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -33,7 +40,7 @@ function SearchIcon() {
   );
 }
 
-function Network({ query, onPick, onSelect }) {
+function Network({ query, onPick, onSearch, onSelect }) {
   const [motionTime, setMotionTime] = useState(0);
   const matches = useMemo(
     () => agents.filter((agent) => `${agent.name} ${agent.note}`.toLowerCase().includes(query.toLowerCase())),
@@ -101,9 +108,9 @@ function Network({ query, onPick, onSelect }) {
       <div className="hub-core">
         <span className="eyebrow">FIND YOUR PERFECT AGENT</span>
         <h1>Agent Hubs</h1>
-        <form className="search" onSubmit={(event) => event.preventDefault()}>
+        <form className="search" onSubmit={(event) => { event.preventDefault(); onSearch(); }}>
           <label className="sr-only" htmlFor="agent-search">Search agents</label>
-          <input id="agent-search" value={query} onChange={(event) => onPick(event.target.value)} placeholder="What do you need help with?" />
+          <input id="agent-search" value={query} onFocus={() => { if (!query) onPick("baby"); }} onChange={(event) => onPick(event.target.value)} placeholder="What do you need help with?" />
           <button type="submit" aria-label="Search"><SearchIcon /></button>
         </form>
         <p>{query ? `${matches.length} agent${matches.length === 1 ? "" : "s"} found in the network` : "Explore a network of agents built around your life."}</p>
@@ -120,6 +127,41 @@ function Network({ query, onPick, onSelect }) {
       })}
 
     </div>
+  );
+}
+
+function SearchResults({ query, onPick, onSearch, onBack }) {
+  return (
+    <main className="search-results">
+      <div className="results-toolbar">
+        <button className="results-back" type="button" onClick={onBack} aria-label="Back to Agent Hub">←</button>
+        <form className="results-search" onSubmit={(event) => { event.preventDefault(); onSearch(); }}>
+          <label className="sr-only" htmlFor="results-agent-search">Search agents</label>
+          <input id="results-agent-search" value={query} onChange={(event) => onPick(event.target.value)} />
+          <button type="submit" aria-label="Search"><SearchIcon /></button>
+        </form>
+      </div>
+
+      <div className="results-heading">
+        <span className="eyebrow">SEARCH RESULTS</span>
+        <h1>Agents for “{query || "baby"}”</h1>
+      </div>
+
+      <section className="result-cards" aria-label="Baby agent search results">
+        {babyResults.map((result) => (
+          <article key={result.name} className={`result-card ${result.featured ? "is-featured" : ""}`}>
+            <span className="result-symbol" aria-hidden="true">✦</span>
+            <h2>{result.name}</h2>
+            <p>{result.note}</p>
+            <ul>
+              {result.features.map((feature) => <li key={feature}>{feature}</li>)}
+            </ul>
+          </article>
+        ))}
+      </section>
+
+      <button className="results-next" type="button" aria-label="Next results">→</button>
+    </main>
   );
 }
 
@@ -175,10 +217,14 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("Agent Hub");
   const [query, setQuery] = useState("");
   const [selectedAgent, setSelectedAgent] = useState(null);
+  const [showResults, setShowResults] = useState(false);
 
   const changeTab = (tab) => {
     setActiveTab(tab);
-    if (tab === "Agent Hub") setSelectedAgent(null);
+    if (tab === "Agent Hub") {
+      setSelectedAgent(null);
+      setShowResults(false);
+    }
   };
 
   return (
@@ -191,7 +237,9 @@ export default function Home() {
       {activeTab === "Agent Hub"
         ? selectedAgent
           ? <AgentDetail agent={selectedAgent} onBack={() => setSelectedAgent(null)} />
-          : <Network query={query} onPick={setQuery} onSelect={setSelectedAgent} />
+          : showResults
+            ? <SearchResults query={query} onPick={setQuery} onSearch={() => setShowResults(true)} onBack={() => setShowResults(false)} />
+            : <Network query={query} onPick={setQuery} onSearch={() => setShowResults(true)} onSelect={setSelectedAgent} />
         : <SecondaryPage type={activeTab} onBack={() => changeTab("Agent Hub")} />}
       <footer><span>AGENT HUB / 2026</span><span>Human needs, intelligent connections.</span></footer>
     </div>
