@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const agents = [
   { id: "health", name: "Hospital Agent", note: "Daily wellness", x: 22, y: 22, icon: "✦", labelSide: "right", points: [[5, 10], [4, 36]] },
@@ -48,7 +48,9 @@ function SearchIcon() {
 
 function Network({ query, onPick, onSearch, onSelect }) {
   const [isMounted, setIsMounted] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [motionTime, setMotionTime] = useState(0);
+  const searchTimer = useRef(null);
   const matches = useMemo(
     () => agents.filter((agent) => `${agent.name} ${agent.note}`.toLowerCase().includes(query.toLowerCase())),
     [query]
@@ -75,6 +77,21 @@ function Network({ query, onPick, onSearch, onSelect }) {
     return () => cancelAnimationFrame(animationFrame);
   }, []);
 
+  useEffect(() => () => {
+    if (searchTimer.current) window.clearTimeout(searchTimer.current);
+  }, []);
+
+  const startSearch = () => {
+    if (isSearching) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      onSearch();
+      return;
+    }
+
+    setIsSearching(true);
+    searchTimer.current = window.setTimeout(onSearch, 820);
+  };
+
   const movingAgents = useMemo(() => agents.map((agent, agentIndex) => {
     if (!isMounted) {
       return { ...agent, movingX: agent.x, movingY: agent.y, movingPoints: agent.points };
@@ -99,7 +116,7 @@ function Network({ query, onPick, onSearch, onSelect }) {
   })));
 
   return (
-    <div className="network" aria-label="Agent network">
+    <div className={`network ${isSearching ? "is-searching" : ""}`} aria-label="Agent network">
       <svg className="connections" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
         {movingAgents.map((agent) => (
           <line key={`${agent.id}-hub`} className="hub-connection" x1={agent.movingX} y1={agent.movingY} x2="50" y2="53" />
@@ -121,10 +138,10 @@ function Network({ query, onPick, onSearch, onSelect }) {
       <div className="hub-core">
         <span className="eyebrow">FIND YOUR PERFECT AGENT</span>
         <h1>Agent Hubs</h1>
-        <form className="search" onSubmit={(event) => { event.preventDefault(); onSearch(); }}>
+        <form className="search" onSubmit={(event) => { event.preventDefault(); startSearch(); }}>
           <label className="sr-only" htmlFor="agent-search">Search agents</label>
           <input id="agent-search" value={query} onFocus={() => { if (!query) onPick("baby"); }} onChange={(event) => onPick(event.target.value)} placeholder="What do you need help with?" />
-          <button type="submit" aria-label="Search"><SearchIcon /></button>
+          <button type="submit" aria-label="Search" disabled={isSearching}><SearchIcon /></button>
         </form>
         <p>{query ? `${matches.length} agent${matches.length === 1 ? "" : "s"} found in the network` : "Explore a network of agents built around your life."}</p>
       </div>
