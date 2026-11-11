@@ -174,7 +174,7 @@ function SearchResults({ query, onPick, onSearch, onBack }) {
       <section className="result-carousel" aria-label="Baby agent search results" aria-roledescription="carousel">
         <div className={`carousel-track ${isSliding ? "is-sliding" : ""}`} onTransitionEnd={finishSlide}>
           {visibleResults.map((result, index) => (
-            <div key={`${carouselStep}-${index}-${result.name}`} className={`carousel-card ${index === 0 ? "edge-left" : ""} ${index === 4 ? "edge-right" : ""}`} aria-hidden={index === 5}>
+            <div key={`${carouselStep}-${index}-${result.name}`} className="carousel-card" aria-hidden={index === 5}>
               <article className="result-card">
                 <span className="result-symbol" aria-hidden="true">✦</span>
                 <h2>{result.name}</h2>
