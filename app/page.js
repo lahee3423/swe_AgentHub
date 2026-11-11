@@ -41,6 +41,7 @@ function SearchIcon() {
 }
 
 function Network({ query, onPick, onSearch, onSelect }) {
+  const [isMounted, setIsMounted] = useState(false);
   const [motionTime, setMotionTime] = useState(0);
   const matches = useMemo(
     () => agents.filter((agent) => `${agent.name} ${agent.note}`.toLowerCase().includes(query.toLowerCase())),
@@ -49,6 +50,8 @@ function Network({ query, onPick, onSearch, onSelect }) {
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+
+    setIsMounted(true);
 
     let animationFrame;
     let lastUpdate = 0;
@@ -67,6 +70,10 @@ function Network({ query, onPick, onSearch, onSelect }) {
   }, []);
 
   const movingAgents = useMemo(() => agents.map((agent, agentIndex) => {
+    if (!isMounted) {
+      return { ...agent, movingX: agent.x, movingY: agent.y, movingPoints: agent.points };
+    }
+
     const agentPhase = motionTime * .48 + agentIndex * 1.37;
     return {
       ...agent,
@@ -77,7 +84,7 @@ function Network({ query, onPick, onSearch, onSelect }) {
         return [x + Math.sin(pointPhase) * .9, y + Math.cos(pointPhase * .91) * .7];
       }),
     };
-  }), [motionTime]);
+  }), [isMounted, motionTime]);
 
   const movingDots = movingAgents.flatMap((agent) => agent.movingPoints.map(([x, y], pointIndex) => ({
     key: `${agent.id}-${pointIndex}`,
