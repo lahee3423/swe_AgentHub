@@ -44,6 +44,9 @@ function Network({ query, onPick, onSelect }) {
   return (
     <div className="network" aria-label="Agent network">
       <svg className="connections" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
+        {agents.map((agent) => (
+          <line key={`${agent.id}-hub`} className="hub-connection" x1={agent.x} y1={agent.y} x2="50" y2="50" />
+        ))}
         {agents.flatMap((agent) => agent.points.map(([x, y]) => (
           <line key={`${agent.id}-${x}-${y}`} x1={agent.x} y1={agent.y} x2={x} y2={y} />
         )))}
