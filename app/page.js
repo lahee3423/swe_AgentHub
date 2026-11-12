@@ -260,6 +260,26 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         )}
       </div>
 
+      {isPlaying && (
+        <aside className="communication-card" aria-label="Agent communication dashboard">
+          <div className="communication-card-header">
+            <span className="communication-live"><i /> LIVE</span>
+            <span>AGENT COMMUNICATION</span>
+          </div>
+          <div className="communication-event">
+            <strong>Cardiology</strong>
+            <span>Vitals synced</span>
+            <time>NOW</time>
+          </div>
+          <div className="communication-event">
+            <strong>Orthopedics</strong>
+            <span>Room status shared</span>
+            <time>02s</time>
+          </div>
+          <div className="communication-route"><span>3 AGENTS</span><span>CONNECTED</span></div>
+        </aside>
+      )}
+
       <div className="detail-network" aria-label={`${agent.name} capabilities`}>
         <svg className="detail-connections" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
           {topics.map((topic) => <line key={topic.label} x1="50" y1="38" x2={topic.x} y2={topic.y} />)}
