@@ -28,6 +28,36 @@ const hospitalTopicPositions = [
 
 const tabs = ["Agent Hub", "My Agent", "Agent Studio"];
 
+const tabRouteNames = {
+  "My Agent": "my-agent",
+  "Agent Studio": "agent-studio",
+};
+
+function readRouteState() {
+  const params = new URLSearchParams(window.location.search);
+  const tab = Object.entries(tabRouteNames).find(([, route]) => route === params.get("tab"))?.[0];
+  const selectedAgent = agents.find((agent) => agent.id === params.get("agent")) || null;
+
+  if (tab) return { activeTab: tab, query: "", selectedAgent: null, showResults: false, isAgentPlaying: false };
+  if (selectedAgent) {
+    return {
+      activeTab: "Agent Hub",
+      query: "",
+      selectedAgent,
+      showResults: false,
+      isAgentPlaying: selectedAgent.id === "health" && params.get("mode") === "play",
+    };
+  }
+
+  return {
+    activeTab: "Agent Hub",
+    query: params.get("view") === "search" ? (params.get("q") || "baby") : "",
+    selectedAgent: null,
+    showResults: params.get("view") === "search",
+    isAgentPlaying: false,
+  };
+}
+
 const babyResults = [
   { name: "Baby Care Agent", note: "A calm routine for everyday care.", features: ["Baby Monitor", "Air Purifier", "Night Light", "Bottle Warmer", "Smart Thermometer", "Diaper Sensor"] },
   { name: "Baby Sleep Agent", note: "A gentler setup for better sleep.", features: ["White Noise Machine", "Room Thermostat", "Sleep Sensor", "Smart Crib", "Blackout Blinds", "Humidifier"] },
@@ -324,13 +354,42 @@ export default function Home() {
   const [isAgentPlaying, setIsAgentPlaying] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
-  const changeTab = (tab) => {
-    setActiveTab(tab);
-    if (tab === "Agent Hub") {
-      setSelectedAgent(null);
-      setIsAgentPlaying(false);
-      setShowResults(false);
+  const applyRouteState = (routeState) => {
+    setActiveTab(routeState.activeTab);
+    setQuery(routeState.query);
+    setSelectedAgent(routeState.selectedAgent);
+    setIsAgentPlaying(routeState.isAgentPlaying);
+    setShowResults(routeState.showResults);
+  };
+
+  const navigate = (route, { replace = false } = {}) => {
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+
+    if (route.tab && tabRouteNames[route.tab]) url.searchParams.set("tab", tabRouteNames[route.tab]);
+    if (route.view === "search") {
+      url.searchParams.set("view", "search");
+      url.searchParams.set("q", route.query || "baby");
     }
+    if (route.agent) {
+      url.searchParams.set("agent", route.agent.id);
+      if (route.play) url.searchParams.set("mode", "play");
+    }
+
+    window.history[replace ? "replaceState" : "pushState"]({}, "", url);
+    applyRouteState(readRouteState());
+  };
+
+  useEffect(() => {
+    const syncFromUrl = () => applyRouteState(readRouteState());
+    syncFromUrl();
+    window.addEventListener("popstate", syncFromUrl);
+    return () => window.removeEventListener("popstate", syncFromUrl);
+  }, []);
+
+  const changeTab = (tab) => {
+    navigate(tab === "Agent Hub" ? {} : { tab });
   };
 
   return (
@@ -348,10 +407,10 @@ export default function Home() {
       </header>}
       {activeTab === "Agent Hub"
         ? selectedAgent
-          ? <AgentDetail agent={selectedAgent} isPlaying={isAgentPlaying} onPlay={() => setIsAgentPlaying(true)} onExitPlay={() => setIsAgentPlaying(false)} onBack={() => { setIsAgentPlaying(false); setSelectedAgent(null); }} />
+          ? <AgentDetail agent={selectedAgent} isPlaying={isAgentPlaying} onPlay={() => navigate({ agent: selectedAgent, play: true })} onExitPlay={() => navigate({ agent: selectedAgent })} onBack={() => navigate({})} />
           : showResults
-            ? <SearchResults query={query} onPick={setQuery} onSearch={() => setShowResults(true)} onBack={() => setShowResults(false)} />
-            : <Network query={query} onPick={setQuery} onSearch={() => setShowResults(true)} onSelect={setSelectedAgent} />
+            ? <SearchResults query={query} onPick={(value) => navigate({ view: "search", query: value }, { replace: true })} onSearch={() => navigate({ view: "search", query }, { replace: true })} onBack={() => navigate({})} />
+            : <Network query={query} onPick={setQuery} onSearch={() => navigate({ view: "search", query })} onSelect={(agent) => navigate({ agent })} />
         : <SecondaryPage type={activeTab} onBack={() => changeTab("Agent Hub")} />}
       {!isAgentPlaying && <footer><span>AGENT HUB / 2026</span><span>Human needs, intelligent connections.</span></footer>}
     </div>
