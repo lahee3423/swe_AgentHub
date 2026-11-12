@@ -57,7 +57,9 @@ function PlayIcon() {
 function Network({ query, onPick, onSearch, onSelect }) {
   const [isMounted, setIsMounted] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchGeometry, setSearchGeometry] = useState(null);
   const [motionTime, setMotionTime] = useState(0);
+  const searchFormRef = useRef(null);
   const searchTimer = useRef(null);
   const matches = useMemo(
     () => agents.filter((agent) => `${agent.name} ${agent.note}`.toLowerCase().includes(query.toLowerCase())),
@@ -96,6 +98,25 @@ function Network({ query, onPick, onSearch, onSelect }) {
       return;
     }
 
+    const rect = searchFormRef.current.getBoundingClientRect();
+    const mobile = window.innerWidth <= 640;
+    const horizontalPadding = mobile ? 20 : window.innerWidth * .05;
+    const toolbarWidth = Math.min(680, window.innerWidth - horizontalPadding * 2);
+    const targetLeft = mobile
+      ? horizontalPadding + 50
+      : (window.innerWidth - toolbarWidth) / 2 + 60;
+
+    setSearchGeometry({
+      "--search-start-top": `${rect.top}px`,
+      "--search-start-left": `${rect.left}px`,
+      "--search-start-width": `${rect.width}px`,
+      "--search-start-height": `${rect.height}px`,
+      "--search-target-top": `${mobile ? 76 : 86}px`,
+      "--search-target-left": `${targetLeft}px`,
+      "--search-target-width": `${mobile ? toolbarWidth - 50 : toolbarWidth - 120}px`,
+      "--search-target-height": `${mobile ? 46 : 52}px`,
+      "--search-target-button": `${mobile ? 36 : 40}px`,
+    });
     setIsSearching(true);
     searchTimer.current = window.setTimeout(onSearch, 820);
   };
@@ -146,7 +167,7 @@ function Network({ query, onPick, onSearch, onSelect }) {
       <div className="hub-core">
         <span className="eyebrow">FIND YOUR PERFECT AGENT</span>
         <h1>Agent Hubs</h1>
-        <form className="search" onSubmit={(event) => { event.preventDefault(); startSearch(); }}>
+        <form ref={searchFormRef} className="search" style={searchGeometry || undefined} onSubmit={(event) => { event.preventDefault(); startSearch(); }}>
           <label className="sr-only" htmlFor="agent-search">Search agents</label>
           <input id="agent-search" value={query} onFocus={() => { if (!query) onPick("baby"); }} onChange={(event) => onPick(event.target.value)} placeholder="What do you need help with?" />
           <button type="submit" aria-label="Search" disabled={isSearching}><SearchIcon /></button>
