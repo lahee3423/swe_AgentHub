@@ -244,18 +244,20 @@ function SearchResults({ query, onPick, onSearch, onBack }) {
   );
 }
 
-function AgentDetail({ agent, onBack }) {
+function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
   const positions = agent.id === "health" ? hospitalTopicPositions : topicPositions;
   const topics = agentTopics[agent.id].map((label, index) => ({ label, x: positions[index][0], y: positions[index][1] }));
 
   return (
-    <main className="agent-detail">
-      <div className="detail-bar">
-        <button className="detail-back" onClick={onBack}><span>←</span> Agent Hub</button>
-        <span className="detail-title" aria-hidden="true" />
-        <button className="detail-launch" aria-label={`${agent.id === "health" ? "Play" : "Open"} ${agent.name}`}>
-          {agent.id === "health" ? <PlayIcon /> : "↗"}
-        </button>
+    <main className={`agent-detail ${isPlaying ? "is-playing" : ""}`}>
+      <div className={`detail-bar ${isPlaying ? "is-playing" : ""}`}>
+        <button className="detail-back" onClick={isPlaying ? onExitPlay : onBack}><span>←</span> {isPlaying ? "Back" : "Agent Hub"}</button>
+        {!isPlaying && <span className="detail-title" aria-hidden="true" />}
+        {!isPlaying && (
+          <button className="detail-launch" onClick={agent.id === "health" ? onPlay : undefined} aria-label={`${agent.id === "health" ? "Play" : "Open"} ${agent.name}`}>
+            {agent.id === "health" ? <PlayIcon /> : "↗"}
+          </button>
+        )}
       </div>
 
       <div className="detail-network" aria-label={`${agent.name} capabilities`}>
@@ -299,19 +301,21 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("Agent Hub");
   const [query, setQuery] = useState("");
   const [selectedAgent, setSelectedAgent] = useState(null);
+  const [isAgentPlaying, setIsAgentPlaying] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
   const changeTab = (tab) => {
     setActiveTab(tab);
     if (tab === "Agent Hub") {
       setSelectedAgent(null);
+      setIsAgentPlaying(false);
       setShowResults(false);
     }
   };
 
   return (
-    <div className="site-shell">
-      <header className="header">
+    <div className={`site-shell ${isAgentPlaying ? "is-immersive" : ""}`}>
+      {!isAgentPlaying && <header className="header">
         <nav aria-label="Main navigation">
           {tabs.map((tab) => (
             <button key={tab} className={activeTab === tab ? "active" : ""} onClick={() => changeTab(tab)}>
@@ -321,15 +325,15 @@ export default function Home() {
             </button>
           ))}
         </nav>
-      </header>
+      </header>}
       {activeTab === "Agent Hub"
         ? selectedAgent
-          ? <AgentDetail agent={selectedAgent} onBack={() => setSelectedAgent(null)} />
+          ? <AgentDetail agent={selectedAgent} isPlaying={isAgentPlaying} onPlay={() => setIsAgentPlaying(true)} onExitPlay={() => setIsAgentPlaying(false)} onBack={() => { setIsAgentPlaying(false); setSelectedAgent(null); }} />
           : showResults
             ? <SearchResults query={query} onPick={setQuery} onSearch={() => setShowResults(true)} onBack={() => setShowResults(false)} />
             : <Network query={query} onPick={setQuery} onSearch={() => setShowResults(true)} onSelect={setSelectedAgent} />
         : <SecondaryPage type={activeTab} onBack={() => changeTab("Agent Hub")} />}
-      <footer><span>AGENT HUB / 2026</span><span>Human needs, intelligent connections.</span></footer>
+      {!isAgentPlaying && <footer><span>AGENT HUB / 2026</span><span>Human needs, intelligent connections.</span></footer>}
     </div>
   );
 }
