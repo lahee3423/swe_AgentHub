@@ -46,6 +46,14 @@ function SearchIcon() {
   );
 }
 
+function PlayIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M8 5.5v13l10-6.5z" />
+    </svg>
+  );
+}
+
 function Network({ query, onPick, onSearch, onSelect }) {
   const [isMounted, setIsMounted] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -223,7 +231,9 @@ function AgentDetail({ agent, onBack }) {
       <div className="detail-bar">
         <button className="detail-back" onClick={onBack}><span>←</span> Agent Hub</button>
         <span className="detail-title" aria-hidden="true" />
-        <button className="detail-launch" aria-label={`Open ${agent.name}`}>↗</button>
+        <button className="detail-launch" aria-label={`${agent.id === "health" ? "Play" : "Open"} ${agent.name}`}>
+          {agent.id === "health" ? <PlayIcon /> : "↗"}
+        </button>
       </div>
 
       <div className="detail-network" aria-label={`${agent.name} capabilities`}>
