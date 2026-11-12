@@ -99,6 +99,7 @@ function Network({ query, onPick, onSearch, onSelect }) {
     }
 
     const rect = searchFormRef.current.getBoundingClientRect();
+    const containingRect = searchFormRef.current.closest(".hub-core").getBoundingClientRect();
     const mobile = window.innerWidth <= 640;
     const horizontalPadding = mobile ? 20 : window.innerWidth * .05;
     const toolbarWidth = Math.min(680, window.innerWidth - horizontalPadding * 2);
@@ -107,12 +108,12 @@ function Network({ query, onPick, onSearch, onSelect }) {
       : (window.innerWidth - toolbarWidth) / 2 + 60;
 
     setSearchGeometry({
-      "--search-start-top": `${rect.top}px`,
-      "--search-start-left": `${rect.left}px`,
+      "--search-start-top": `${rect.top - containingRect.top}px`,
+      "--search-start-left": `${rect.left - containingRect.left}px`,
       "--search-start-width": `${rect.width}px`,
       "--search-start-height": `${rect.height}px`,
-      "--search-target-top": `${mobile ? 76 : 86}px`,
-      "--search-target-left": `${targetLeft}px`,
+      "--search-target-top": `${(mobile ? 76 : 86) - containingRect.top}px`,
+      "--search-target-left": `${targetLeft - containingRect.left}px`,
       "--search-target-width": `${mobile ? toolbarWidth - 50 : toolbarWidth - 120}px`,
       "--search-target-height": `${mobile ? 46 : 52}px`,
       "--search-target-button": `${mobile ? 36 : 40}px`,
