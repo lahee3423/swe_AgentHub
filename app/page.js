@@ -581,16 +581,46 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
 }
 
 function SecondaryPage({ type, onBack }) {
-  const studio = type === "Agent Studio";
   return (
     <main className="secondary">
       <div className="secondary-art" aria-hidden="true">
         <span className="big-asterisk">✳</span><span className="ring ring-a"/><span className="ring ring-b"/>
       </div>
-      <span className="eyebrow">{studio ? "BUILD SOMETHING NEW" : "YOUR PERSONAL NETWORK"}</span>
-      <h1>{studio ? <>Shape an agent<br/><em>from scratch.</em></> : <>Your agents,<br/><em>all in one place.</em></>}</h1>
-      <p>{studio ? "Define a purpose, tune its personality, and connect the tools it needs." : "Agents you create and save will live here, ready whenever you need them."}</p>
-      <button className="primary-button" onClick={onBack}>{studio ? "Start creating" : "Discover agents"}<span>↗</span></button>
+      <span className="eyebrow">YOUR PERSONAL NETWORK</span>
+      <h1>Your agents,<br/><em>all in one place.</em></h1>
+      <p>Agents you create and save will live here, ready whenever you need them.</p>
+      <button className="primary-button" onClick={onBack}>Discover agents<span>↗</span></button>
+    </main>
+  );
+}
+
+function AgentStudioPage() {
+  const [prompt, setPrompt] = useState("");
+
+  return (
+    <main className="network studio-network" aria-label="Agent Studio">
+      <svg className="connections studio-connections" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
+        <line x1="0" y1="12" x2="50" y2="50" />
+        <line x1="0" y1="78" x2="50" y2="50" />
+        <line x1="100" y1="8" x2="50" y2="50" />
+        <line x1="100" y1="52" x2="50" y2="50" />
+        <line x1="100" y1="88" x2="50" y2="50" />
+      </svg>
+      <div className="hub-core studio-core">
+        <span className="eyebrow">DESIGN YOUR PERFECT AGENT</span>
+        <h1>Agent Studio</h1>
+        <form className="search" onSubmit={(event) => event.preventDefault()}>
+          <label className="sr-only" htmlFor="studio-prompt">Describe the agent you want to create</label>
+          <input
+            id="studio-prompt"
+            value={prompt}
+            onChange={(event) => setPrompt(event.target.value)}
+            placeholder="What kind of agent do you want to create?"
+          />
+          <button type="submit" aria-label="Start creating"><SearchIcon /></button>
+        </form>
+        <p>Create an agent built around your ideas.</p>
+      </div>
     </main>
   );
 }
@@ -659,7 +689,9 @@ export default function Home() {
           : showResults
             ? <SearchResults query={query} onPick={(value) => navigate({ view: "search", query: value }, { replace: true })} onSearch={() => navigate({ view: "search", query }, { replace: true })} onBack={() => navigate({})} />
             : <Network query={query} onPick={setQuery} onSearch={() => navigate({ view: "search", query })} onSelect={(agent) => navigate({ agent })} />
-        : <SecondaryPage type={activeTab} onBack={() => changeTab("Agent Hub")} />}
+        : activeTab === "Agent Studio"
+          ? <AgentStudioPage />
+          : <SecondaryPage type={activeTab} onBack={() => changeTab("Agent Hub")} />}
       {!isAgentPlaying && <footer><span>AGENT HUB / 2026</span><span>Human needs, intelligent connections.</span></footer>}
     </div>
   );

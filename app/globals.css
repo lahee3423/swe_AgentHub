@@ -63,6 +63,9 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .network.is-searching .search { position: fixed; top: var(--search-start-top); left: var(--search-start-left); width: var(--search-start-width); height: var(--search-start-height); margin: 0; transform: none; z-index: 30; animation: search-dock .82s cubic-bezier(.22,.78,.2,1) forwards; }
 .network.is-searching .search button { width: var(--search-target-button); height: var(--search-target-button); }
 .network.is-searching .hub-core > .eyebrow, .network.is-searching .hub-core > h1, .network.is-searching .hub-core > p, .network.is-searching .agent-node, .network.is-searching .connection-dot, .network.is-searching .connections { opacity: 0; }
+.studio-network { background: var(--paper); }
+.studio-connections { opacity: .72; }
+.studio-core h1 { white-space: nowrap; }
 
 @keyframes search-dock {
   to {
