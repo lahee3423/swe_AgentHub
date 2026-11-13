@@ -64,8 +64,9 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .network.is-searching .search button { width: var(--search-target-button); height: var(--search-target-button); }
 .network.is-searching .hub-core > .eyebrow, .network.is-searching .hub-core > h1, .network.is-searching .hub-core > p, .network.is-searching .agent-node, .network.is-searching .connection-dot, .network.is-searching .connections { opacity: 0; }
 .studio-network { background: var(--paper); }
-.studio-connections { opacity: .72; }
+.studio-core { width: min(54vw, 720px); }
 .studio-core h1 { white-space: nowrap; }
+.studio-core .search { width: min(100%, 620px); }
 
 @keyframes search-dock {
   to {

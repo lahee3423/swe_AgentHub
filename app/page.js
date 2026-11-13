@@ -599,13 +599,6 @@ function AgentStudioPage() {
 
   return (
     <main className="network studio-network" aria-label="Agent Studio">
-      <svg className="connections studio-connections" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
-        <line x1="0" y1="12" x2="50" y2="50" />
-        <line x1="0" y1="78" x2="50" y2="50" />
-        <line x1="100" y1="8" x2="50" y2="50" />
-        <line x1="100" y1="52" x2="50" y2="50" />
-        <line x1="100" y1="88" x2="50" y2="50" />
-      </svg>
       <div className="hub-core studio-core">
         <span className="eyebrow">DESIGN YOUR PERFECT AGENT</span>
         <h1>Agent Studio</h1>
