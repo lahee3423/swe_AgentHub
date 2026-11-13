@@ -322,7 +322,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         </div>
 
         {topics.map((topic) => (
-          <div key={topic.label} className={`detail-node ${topic.x > 50 ? "detail-node-left" : "detail-node-right"} ${agent.id === "health" ? "hospital-detail-node" : ""} ${topic.label === "Patient Info Agent" ? "patient-info-node" : ""}`} style={{ left: `${topic.x}%`, top: `${topic.y}%` }}>
+          <div key={topic.label} className={`detail-node ${topic.x > 50 ? "detail-node-left" : "detail-node-right"} ${agent.id === "health" ? "hospital-detail-node" : ""} ${agent.id === "health" && topic.y < 50 ? "hospital-node-top" : ""} ${topic.label === "Patient Info Agent" ? "patient-info-node" : ""}`} style={{ left: `${topic.x}%`, top: `${topic.y}%` }}>
             <span className="detail-dot" />
             <strong>{topic.label === "Patient Info Agent" ? <>Patient Info<br />Agent</> : topic.label}</strong>
           </div>
