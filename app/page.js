@@ -348,18 +348,25 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
           ))}
         </svg>
 
-        {isPlaying && agent.id === "health" && [0, 1, 2].map((particle) => (
-          <span
-            key={particle}
-            className="transfer-particle"
-            style={{
-              "--particle-start-x": `${topics[0].x}%`,
-              "--particle-start-y": `${topics[0].y}%`,
-              "--particle-delay": `${particle * -.28}s`,
-            }}
-            aria-hidden="true"
-          />
-        ))}
+        {isPlaying && agent.id === "health" && [0, 1, 2].map((particle) => {
+          const spread = [.28, .5, .72][particle];
+          const midX = topics[0].x + (50 - topics[0].x) * spread;
+          const midY = topics[0].y + (38 - topics[0].y) * spread;
+
+          return (
+            <span
+              key={particle}
+              className="transfer-particle"
+              style={{
+                "--particle-start-x": `${topics[0].x}%`,
+                "--particle-start-y": `${topics[0].y}%`,
+                "--particle-mid-x": `${midX}%`,
+                "--particle-mid-y": `${midY}%`,
+              }}
+              aria-hidden="true"
+            />
+          );
+        })}
 
         <div className={`detail-center ${agent.id === "health" ? "hospital-detail-center" : ""}`}>
           <span className="detail-star">✦</span>
