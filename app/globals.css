@@ -122,8 +122,8 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .detail-launch svg { width: 20px; height: 20px; fill: var(--white); margin-left: 2px; }
 .detail-network { width: 100%; max-width: 1180px; min-height: 560px; flex: 1; margin: 0 auto; position: relative; isolation: isolate; }
 .detail-network::before { content: ""; position: absolute; left: 50%; top: 38%; width: min(35vw, 480px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: var(--agent-glow); z-index: -2; }
-.detail-connections { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -3; }
-.detail-connections line { stroke: var(--line); stroke-width: .23; vector-effect: non-scaling-stroke; }
+.detail-connections { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
+.detail-connections line { stroke: rgba(107, 107, 107, .42); stroke-width: .5; vector-effect: non-scaling-stroke; }
 .detail-center { position: absolute; left: 50%; top: 38%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; text-align: center; }
 .hospital-detail-center { transform: translate(-50%, -29px); }
 .detail-star { font-size: 58px; line-height: .9; color: var(--accent); }
@@ -136,7 +136,6 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .detail-node-left strong { right: 22px; }
 .hospital-detail-node strong { left: 50%; right: auto; top: 20px; transform: translateX(-50%); text-align: center; background: transparent; }
 .patient-info-node .detail-dot { width: 9px; height: 9px; background: var(--gray); box-shadow: 0 0 0 4px rgba(107, 107, 107, .09); }
-.patient-info-node strong { left: auto; right: 0; transform: none; text-align: right; }
 .communication-card { width: 280px; position: fixed; left: 3.5vw; bottom: 28px; z-index: 6; padding: 18px; border-radius: 18px; background: var(--accent); color: var(--white); box-shadow: 0 18px 45px rgba(165,0,52,.24); }
 .communication-card-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 13px; border-bottom: 1px solid rgba(255,255,255,.24); font-size: 8px; font-weight: 800; letter-spacing: 1.3px; }
 .communication-live { display: flex; align-items: center; gap: 6px; }
