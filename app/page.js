@@ -315,7 +315,6 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
             </div>
 
             <div className="payload-heading">
-              <span className="payload-icon" aria-hidden="true">{"{}"}</span>
               <strong>PAYLOAD</strong>
             </div>
             <dl className="payload-list">

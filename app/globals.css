@@ -137,7 +137,7 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .hospital-detail-node strong { left: 50%; right: auto; top: 20px; transform: translateX(-50%); text-align: center; background: transparent; }
 .hospital-node-top strong { top: auto; bottom: 20px; }
 .patient-info-node .detail-dot { width: 9px; height: 9px; background: var(--gray); box-shadow: 0 0 0 4px rgba(107, 107, 107, .09); }
-.communication-card { width: min(620px, 46vw); position: fixed; left: 3.5vw; bottom: 24px; z-index: 6; padding: 16px; border-radius: 22px; background: rgba(165,0,52,.12); color: var(--ink); box-shadow: 0 22px 55px rgba(38,38,38,.12); }
+.communication-card { width: min(520px, 40vw); position: fixed; left: 3.5vw; bottom: 24px; z-index: 6; padding: 16px; border-radius: 22px; background: rgba(165,0,52,.12); color: var(--ink); box-shadow: 0 22px 55px rgba(38,38,38,.12); }
 .inspector-header { min-height: 42px; display: flex; align-items: center; padding: 0 2px 12px; }
 .inspector-heading { display: flex; align-items: center; gap: 11px; color: #4c3f43; font-size: 15px; }
 .inspector-icon { width: 25px; height: 23px; display: grid; place-items: center; }
@@ -146,13 +146,12 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .inspector-task-row { min-height: 46px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-bottom: 12px; border-bottom: 1px solid rgba(165,0,52,.2); }
 .inspector-task { color: var(--accent); font-size: 19px; }
 .inspector-task-row span { color: #5f5558; font-size: 13px; white-space: nowrap; }
-.payload-heading { display: flex; align-items: center; gap: 9px; margin: 12px 0 8px; color: #4c3f43; font-size: 13px; }
-.payload-icon { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; background: rgba(165,0,52,.1); color: var(--accent); font-size: 11px; font-weight: 850; }
+.payload-heading { display: flex; align-items: center; margin: 12px 0 8px; color: #4c3f43; font-size: 13px; }
 .payload-list { margin: 0; }
 .payload-list div { min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border-bottom: 1px solid rgba(165,0,52,.13); }
 .payload-list div:last-child { border-bottom: 0; }
-.payload-list dt { color: #6b5d62; font-size: 12px; }
-.payload-list dd { margin: 0; text-align: right; font-size: 13px; font-weight: 750; }
+.payload-list dt { color: #6b5d62; font-size: 13px; }
+.payload-list dd { margin: 0; text-align: right; font-size: 14px; font-weight: 750; }
 
 .secondary { min-height: calc(100svh - 102px); flex: 1; padding: 10vh 9vw; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
 .secondary h1 { font-size: clamp(58px, 7vw, 110px); margin: 22px 0 30px; max-width: 850px; }
@@ -207,7 +206,7 @@ footer { height: 44px; padding: 0 3.5vw; display: flex; align-items: center; jus
   .detail-node strong { font-size: 11px; }
   .detail-node-right strong { left: 18px; }
   .detail-node-left strong { right: 18px; }
-  .communication-card { width: calc(100vw - 24px); left: 12px; bottom: 12px; padding: 11px; border-radius: 18px; }
+  .communication-card { width: calc(100vw - 56px); left: 50%; bottom: 12px; padding: 11px; border-radius: 18px; transform: translateX(-50%); }
   .inspector-header { min-height: 34px; padding-bottom: 8px; }
   .inspector-heading { gap: 8px; font-size: 12px; }
   .inspector-content { padding: 12px 13px 0; border-radius: 14px; }
@@ -215,9 +214,8 @@ footer { height: 44px; padding: 0 3.5vw; display: flex; align-items: center; jus
   .inspector-task { font-size: 16px; }
   .inspector-task-row span { font-size: 10px; }
   .payload-heading { margin: 8px 0 4px; font-size: 11px; }
-  .payload-icon { width: 24px; height: 24px; }
   .payload-list div { min-height: 37px; }
-  .payload-list dt, .payload-list dd { font-size: 10px; }
+  .payload-list dt, .payload-list dd { font-size: 11px; }
   .secondary { min-height: calc(100svh - 54px); padding: 10vh 28px 100px; }
   .secondary h1 { font-size: 52px; letter-spacing: -3px; }
   .secondary-art { width: 96vw; opacity: .65; right: -43vw; }
