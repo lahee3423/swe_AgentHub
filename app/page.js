@@ -136,6 +136,40 @@ function CardiologyIcon() {
   );
 }
 
+function OrthopedicsIcon() {
+  return (
+    <svg className="line-icon" viewBox="0 0 32 28" aria-hidden="true">
+      <path fill="none" d="M9 8.5a3 3 0 1 1 2.8-4.1l8.4 8.4a3 3 0 1 1 3.4 3.4l-8.4-8.4A3 3 0 0 1 9 8.5Zm14 11a3 3 0 1 1-2.8 4.1l-8.4-8.4a3 3 0 1 1-3.4-3.4l8.4 8.4a3 3 0 0 1 6.2-.7Z" />
+    </svg>
+  );
+}
+
+function RoomIcon() {
+  return (
+    <svg className="line-icon" viewBox="0 0 32 28" aria-hidden="true">
+      <path fill="none" d="M4 22V9m0 8h24v5M8 13h7a3 3 0 0 1 3 3v1H8v-4Zm10 0h7a3 3 0 0 1 3 3v1H18v-4Z" />
+    </svg>
+  );
+}
+
+function PatientInfoIcon() {
+  return (
+    <svg className="line-icon" viewBox="0 0 32 28" aria-hidden="true">
+      <rect fill="none" x="4.5" y="3.5" width="23" height="21" rx="3" />
+      <circle fill="none" cx="11" cy="11" r="3" />
+      <path fill="none" d="M6.8 20c.7-3 2.1-4.5 4.2-4.5s3.5 1.5 4.2 4.5M19 10h5m-5 5h5m-5 5h4" />
+    </svg>
+  );
+}
+
+function InspectorAgentIcon({ agentName }) {
+  if (agentName === "Cardiology Agent") return <CardiologyIcon />;
+  if (agentName === "Orthopedics Agent") return <OrthopedicsIcon />;
+  if (agentName === "Room Agents") return <RoomIcon />;
+  if (agentName === "Patient Info Agent") return <PatientInfoIcon />;
+  return "✦";
+}
+
 function Network({ query, onPick, onSearch, onSelect }) {
   const [isMounted, setIsMounted] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -343,6 +377,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
   const particleEnd = nodePositions[stepDetails.to];
   const isPatientHospitalTransfer = [stepDetails.from, stepDetails.to].includes("hospital")
     && [stepDetails.from, stepDetails.to].includes("patientInfo");
+  const isGrayTransfer = simulationStep === 6;
   const connectionDistance = Math.hypot(particleEnd.x - particleStart.x, particleEnd.y - particleStart.y);
   const particleDuration = connectionDistance <= 40 ? "1.3s" : "1.5s";
   const hospitalLabelAbove = (stepDetails.from === "hospital" && particleEnd.y > 38)
@@ -381,8 +416,8 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         <aside className="communication-card" aria-label="Message inspector dashboard">
           <div className="inspector-header">
             <span className="inspector-heading">
-              <span className={`inspector-icon ${stepDetails.sender === "Cardiology Agent" ? "" : "inspector-star"}`}>
-                {stepDetails.sender === "Cardiology Agent" ? <CardiologyIcon /> : "✦"}
+              <span className={`inspector-icon ${stepDetails.sender === "Hospital Agent" ? "inspector-star" : ""}`}>
+                <InspectorAgentIcon agentName={stepDetails.sender} />
               </span>
               <strong>{stepDetails.sender}</strong>
             </span>
@@ -428,7 +463,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
           ))}
           {isPlaying && !stepDetails.internal && (
             <line
-              className={`active-transfer-line ${isPatientHospitalTransfer ? "bidirectional-transfer-line" : ""}`}
+              className={`active-transfer-line ${isPatientHospitalTransfer ? "bidirectional-transfer-line" : ""} ${isGrayTransfer ? "gray-transfer-line" : ""}`}
               x1={particleStart.x}
               y1={particleStart.y}
               x2={particleEnd.x}
@@ -458,7 +493,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
             ];
           }
 
-          return <span key={`${simulationStep}-${particle}`} className="transfer-particle" style={particleStyle} aria-hidden="true" />;
+          return <span key={`${simulationStep}-${particle}`} className={`transfer-particle ${isGrayTransfer ? "transfer-particle-gray" : ""}`} style={particleStyle} aria-hidden="true" />;
         })}
 
         <div className={`detail-center ${agent.id === "health" ? "hospital-detail-center" : ""} ${hospitalLabelAbove ? "hospital-label-above" : ""}`}>
