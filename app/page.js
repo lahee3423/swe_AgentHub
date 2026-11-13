@@ -328,7 +328,16 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
 
       <div className="detail-network" aria-label={`${agent.name} capabilities`}>
         <svg className="detail-connections" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
-          {topics.map((topic) => <line key={topic.label} x1="50" y1="38" x2={topic.x} y2={topic.y} />)}
+          {topics.map((topic) => (
+            <line
+              key={topic.label}
+              className={isPlaying && topic.label === "Cardiology Agent" ? "active-transfer-line" : undefined}
+              x1="50"
+              y1="38"
+              x2={topic.x}
+              y2={topic.y}
+            />
+          ))}
         </svg>
 
         <div className={`detail-center ${agent.id === "health" ? "hospital-detail-center" : ""}`}>
