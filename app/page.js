@@ -359,7 +359,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
       return undefined;
     }
 
-    const readyTimer = window.setTimeout(() => setIsDeviceCheckReady(true), 1000);
+    const readyTimer = window.setTimeout(() => setIsDeviceCheckReady(true), 2000);
     return () => window.clearTimeout(readyTimer);
   }, [simulationStep]);
 
@@ -439,22 +439,24 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
           "cubic-bezier(.25,.5,.65,.85)",
           "linear",
           "cubic-bezier(.35,.15,.75,.5)",
-        ].map((speedCurve, particle) => {
-          return (
-            <span
-              key={`${simulationStep}-${particle}`}
-              className="transfer-particle"
-              style={{
-                "--particle-start-x": `${particleStart.x}%`,
-                "--particle-start-y": `${particleStart.y}%`,
-                "--particle-end-x": `${particleEnd.x}%`,
-                "--particle-end-y": `${particleEnd.y}%`,
-                "--particle-duration": isPatientHospitalTransfer ? "1.8s" : "1.5s",
-                "--particle-speed-curve": speedCurve,
-              }}
-              aria-hidden="true"
-            />
-          );
+        ].flatMap((speedCurve, particle) => {
+          const particleStyle = {
+            "--particle-start-x": `${particleStart.x}%`,
+            "--particle-start-y": `${particleStart.y}%`,
+            "--particle-end-x": `${particleEnd.x}%`,
+            "--particle-end-y": `${particleEnd.y}%`,
+            "--particle-duration": "1.5s",
+            "--particle-speed-curve": speedCurve,
+          };
+
+          if (isPatientHospitalTransfer) {
+            return [
+              <span key={`${simulationStep}-forward-${particle}`} className="transfer-particle transfer-particle-forward" style={particleStyle} aria-hidden="true" />,
+              <span key={`${simulationStep}-reverse-${particle}`} className="transfer-particle transfer-particle-reverse" style={particleStyle} aria-hidden="true" />,
+            ];
+          }
+
+          return <span key={`${simulationStep}-${particle}`} className="transfer-particle" style={particleStyle} aria-hidden="true" />;
         })}
 
         <div className={`detail-center ${agent.id === "health" ? "hospital-detail-center" : ""} ${hospitalLabelAbove ? "hospital-label-above" : ""}`}>
