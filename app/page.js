@@ -343,6 +343,8 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
   const particleEnd = nodePositions[stepDetails.to];
   const isPatientHospitalTransfer = [stepDetails.from, stepDetails.to].includes("hospital")
     && [stepDetails.from, stepDetails.to].includes("patientInfo");
+  const connectionDistance = Math.hypot(particleEnd.x - particleStart.x, particleEnd.y - particleStart.y);
+  const particleDuration = connectionDistance <= 40 ? "1.3s" : "1.5s";
   const hospitalLabelAbove = (stepDetails.from === "hospital" && particleEnd.y > 38)
     || (stepDetails.to === "hospital" && particleStart.y > 38);
   const displayedPayload = simulationStep === 7 && !isDeviceCheckReady
@@ -426,7 +428,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
           ))}
           {isPlaying && !stepDetails.internal && (
             <line
-              className="active-transfer-line"
+              className={`active-transfer-line ${isPatientHospitalTransfer ? "bidirectional-transfer-line" : ""}`}
               x1={particleStart.x}
               y1={particleStart.y}
               x2={particleEnd.x}
@@ -445,7 +447,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
             "--particle-start-y": `${particleStart.y}%`,
             "--particle-end-x": `${particleEnd.x}%`,
             "--particle-end-y": `${particleEnd.y}%`,
-            "--particle-duration": "1.5s",
+            "--particle-duration": particleDuration,
             "--particle-speed-curve": speedCurve,
           };
 
