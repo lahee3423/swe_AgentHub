@@ -23,7 +23,7 @@ const topicPositions = [
 ];
 
 const hospitalTopicPositions = [
-  [24, 22], [76, 22], [50, 84], [88, 78],
+  [24, 22], [76, 22], [50, 84], [92, 82],
 ];
 
 const tabs = ["Agent Hub", "My Agent", "Agent Studio"];
@@ -324,7 +324,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         {topics.map((topic) => (
           <div key={topic.label} className={`detail-node ${topic.x > 50 ? "detail-node-left" : "detail-node-right"} ${agent.id === "health" ? "hospital-detail-node" : ""} ${topic.label === "Patient Info Agent" ? "patient-info-node" : ""}`} style={{ left: `${topic.x}%`, top: `${topic.y}%` }}>
             <span className="detail-dot" />
-            <strong>{topic.label}</strong>
+            <strong>{topic.label === "Patient Info Agent" ? <>Patient Info<br />Agent</> : topic.label}</strong>
           </div>
         ))}
       </div>
