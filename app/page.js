@@ -291,22 +291,36 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
       </div>
 
       {isPlaying && (
-        <aside className="communication-card" aria-label="Agent communication dashboard">
-          <div className="communication-card-header">
-            <span className="communication-live"><i /> LIVE</span>
-            <span>AGENT COMMUNICATION</span>
+        <aside className="communication-card" aria-label="Message inspector dashboard">
+          <div className="inspector-header">
+            <span className="inspector-heading">
+              <span className="inspector-icon" aria-hidden="true"><i /><i /><i /></span>
+              <strong>MESSAGE INSPECTOR</strong>
+            </span>
+            <span className="inspector-step">STEP 01 / 10</span>
           </div>
-          <div className="communication-event">
-            <strong>Cardiology</strong>
-            <span>Vitals synced</span>
-            <time>NOW</time>
+
+          <div className="inspector-content">
+            <span className="inspector-label">CURRENT TASK</span>
+            <strong className="inspector-task">transfer.request</strong>
+            <p>환자 이송 요청</p>
+
+            <div className="payload-heading">
+              <span className="payload-icon" aria-hidden="true">{"{}"}</span>
+              <strong>PAYLOAD</strong>
+            </div>
+            <dl className="payload-list">
+              <div><dt>Patient ID</dt><dd>P-1024</dd></div>
+              <div><dt>Target Department</dt><dd>Orthopedics</dd></div>
+              <div><dt>Approval ID</dt><dd>APR-0081</dd></div>
+            </dl>
           </div>
-          <div className="communication-event">
-            <strong>Orthopedics</strong>
-            <span>Room status shared</span>
-            <time>02s</time>
+
+          <div className="inspector-footer">
+            <button type="button" className="inspector-prev" disabled><span>‹</span> Prev</button>
+            <span>1 / 10</span>
+            <button type="button" className="inspector-next">Next <span>›</span></button>
           </div>
-          <div className="communication-route"><span>3 AGENTS</span><span>CONNECTED</span></div>
         </aside>
       )}
 
