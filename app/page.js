@@ -346,6 +346,16 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
               y2={topic.y}
             />
           ))}
+          {isPlaying && agent.id === "health" && [0, 1, 2].map((particle) => (
+            <circle key={particle} className="transfer-particle" r="0.72">
+              <animateMotion
+                path={`M ${topics[0].x} ${topics[0].y} L 50 38`}
+                dur="1.8s"
+                begin={`-${particle * .6}s`}
+                repeatCount="indefinite"
+              />
+            </circle>
+          ))}
         </svg>
 
         <div className={`detail-center ${agent.id === "health" ? "hospital-detail-center" : ""}`}>
