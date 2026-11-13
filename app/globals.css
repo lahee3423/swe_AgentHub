@@ -136,6 +136,7 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .hospital-detail-center { transform: translate(-50%, -29px); }
 .detail-star { font-size: 58px; line-height: .9; color: var(--accent); }
 .detail-center strong { margin-top: 12px; font-size: 21px; }
+.agent-detail.is-playing .hospital-detail-center strong { position: absolute; bottom: calc(100% + 12px); margin-top: 0; white-space: nowrap; }
 .detail-center small { margin-top: 5px; color: var(--gray); font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; font-weight: 700; }
 .detail-node { position: absolute; width: 16px; height: 16px; transform: translate(-50%, -50%); display: flex; align-items: center; z-index: 2; }
 .detail-dot { width: 12px; height: 12px; flex: 0 0 auto; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 6px rgba(165, 0, 52, .09); }
