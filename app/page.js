@@ -340,6 +340,10 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
   };
   const particleStart = nodePositions[stepDetails.from];
   const particleEnd = nodePositions[stepDetails.to];
+  const isPatientHospitalTransfer = [stepDetails.from, stepDetails.to].includes("hospital")
+    && [stepDetails.from, stepDetails.to].includes("patientInfo");
+  const hospitalLabelAbove = (stepDetails.from === "hospital" && particleEnd.y > 38)
+    || (stepDetails.to === "hospital" && particleStart.y > 38);
 
   useEffect(() => {
     if (!isPlaying) setSimulationStep(1);
@@ -389,6 +393,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
             <div className="inspector-progress" aria-label={`Step ${simulationStep} of 10`}>
               {Array.from({ length: 10 }, (_, index) => <i key={index} className={index === simulationStep - 1 ? "active" : ""} />)}
             </div>
+            <span className="inspector-step-count">STEP {String(simulationStep).padStart(2, "0")} / 10</span>
             <button type="button" className="inspector-next" aria-label="Next step" disabled={simulationStep === 10} onClick={() => setSimulationStep((step) => Math.min(10, step + 1))}>Next <span>›</span></button>
           </div>
         </aside>
@@ -430,6 +435,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
                 "--particle-start-y": `${particleStart.y}%`,
                 "--particle-end-x": `${particleEnd.x}%`,
                 "--particle-end-y": `${particleEnd.y}%`,
+                "--particle-duration": isPatientHospitalTransfer ? "1.8s" : "1.5s",
                 "--particle-speed-curve": speedCurve,
               }}
               aria-hidden="true"
@@ -437,7 +443,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
           );
         })}
 
-        <div className={`detail-center ${agent.id === "health" ? "hospital-detail-center" : ""}`}>
+        <div className={`detail-center ${agent.id === "health" ? "hospital-detail-center" : ""} ${hospitalLabelAbove ? "hospital-label-above" : ""}`}>
           <span className="detail-star">✦</span>
           <strong>{agent.name}</strong>
           {agent.id !== "health" && <small>{agent.note}</small>}

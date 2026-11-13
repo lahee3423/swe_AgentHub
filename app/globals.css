@@ -125,7 +125,7 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .detail-connections { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
 .detail-connections line { stroke: rgba(107, 107, 107, .42); stroke-width: .5; vector-effect: non-scaling-stroke; }
 .detail-connections line.active-transfer-line { stroke: var(--accent); stroke-width: 1.35; filter: drop-shadow(0 0 3px rgba(165,0,52,.9)) drop-shadow(0 0 8px rgba(165,0,52,.55)); animation: transfer-line-glow 1.45s ease-in-out infinite; }
-.transfer-particle { position: absolute; left: var(--particle-start-x); top: var(--particle-start-y); width: 6px; height: 6px; transform: translate(-50%, -50%); z-index: 1; animation: transfer-particle-move 1.5s var(--particle-speed-curve) infinite; will-change: left, top; }
+.transfer-particle { position: absolute; left: var(--particle-start-x); top: var(--particle-start-y); width: 6px; height: 6px; transform: translate(-50%, -50%); z-index: 1; animation: transfer-particle-move var(--particle-duration, 1.5s) var(--particle-speed-curve) infinite; will-change: left, top; }
 .transfer-particle::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 5px rgba(165,0,52,.09); }
 @keyframes transfer-line-glow { 50% { stroke-width: 1.8; opacity: .72; filter: drop-shadow(0 0 5px rgba(165,0,52,1)) drop-shadow(0 0 12px rgba(165,0,52,.7)); } }
 @keyframes transfer-particle-move {
@@ -136,7 +136,8 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .hospital-detail-center { transform: translate(-50%, -29px); }
 .detail-star { font-size: 58px; line-height: .9; color: var(--accent); }
 .detail-center strong { margin-top: 12px; font-size: 21px; }
-.agent-detail.is-playing .hospital-detail-center strong { position: absolute; bottom: calc(100% + 12px); margin-top: 0; white-space: nowrap; }
+.agent-detail.is-playing .hospital-detail-center strong { white-space: nowrap; }
+.agent-detail.is-playing .hospital-detail-center.hospital-label-above strong { position: absolute; bottom: calc(100% + 12px); margin-top: 0; }
 .detail-center small { margin-top: 5px; color: var(--gray); font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; font-weight: 700; }
 .detail-node { position: absolute; width: 16px; height: 16px; transform: translate(-50%, -50%); display: flex; align-items: center; z-index: 2; }
 .detail-dot { width: 12px; height: 12px; flex: 0 0 auto; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 6px rgba(165, 0, 52, .09); }
@@ -164,7 +165,7 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .payload-list div:last-child { border-bottom: 0; }
 .payload-list dt { color: #6b5d62; font-size: 13px; }
 .payload-list dd { margin: 0; text-align: right; font-size: 14px; font-weight: 750; }
-.inspector-footer { min-height: 48px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding-top: 10px; }
+.inspector-footer { min-height: 48px; display: grid; grid-template-columns: 1fr auto auto 1fr; align-items: center; gap: 12px; padding-top: 10px; }
 .inspector-footer button { min-width: 82px; height: 34px; padding: 0 14px; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 9px; font-size: 12px; cursor: pointer; }
 .inspector-footer button span { font-size: 22px; line-height: 1; }
 .inspector-prev { justify-self: start; border: 1px solid rgba(107,107,107,.3); background: transparent; color: #6f6669; }
@@ -174,6 +175,7 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .inspector-progress { display: flex; align-items: center; justify-content: center; gap: 5px; }
 .inspector-progress i { width: 6px; height: 6px; border-radius: 6px; background: rgba(107,107,107,.25); }
 .inspector-progress i.active { width: 24px; background: var(--accent); }
+.inspector-step-count { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .5px; white-space: nowrap; }
 
 .secondary { min-height: calc(100svh - 102px); flex: 1; padding: 10vh 9vw; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
 .secondary h1 { font-size: clamp(58px, 7vw, 110px); margin: 22px 0 30px; max-width: 850px; }
@@ -243,6 +245,7 @@ footer { height: 44px; padding: 0 3.5vw; display: flex; align-items: center; jus
   .inspector-progress { gap: 3px; }
   .inspector-progress i { width: 5px; height: 5px; }
   .inspector-progress i.active { width: 18px; }
+  .inspector-step-count { font-size: 8px; letter-spacing: 0; }
   .secondary { min-height: calc(100svh - 54px); padding: 10vh 28px 100px; }
   .secondary h1 { font-size: 52px; letter-spacing: -3px; }
   .secondary-art { width: 96vw; opacity: .65; right: -43vw; }
