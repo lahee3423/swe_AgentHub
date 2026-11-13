@@ -348,11 +348,11 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
           ))}
         </svg>
 
-        {isPlaying && agent.id === "health" && [0, 1, 2].map((particle) => {
-          const spread = [.28, .5, .72][particle];
-          const midX = topics[0].x + (50 - topics[0].x) * spread;
-          const midY = topics[0].y + (38 - topics[0].y) * spread;
-
+        {isPlaying && agent.id === "health" && [
+          { x: "-10px", y: "-6px" },
+          { x: "0px", y: "0px" },
+          { x: "10px", y: "6px" },
+        ].map((spread, particle) => {
           return (
             <span
               key={particle}
@@ -360,8 +360,8 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
               style={{
                 "--particle-start-x": `${topics[0].x}%`,
                 "--particle-start-y": `${topics[0].y}%`,
-                "--particle-mid-x": `${midX}%`,
-                "--particle-mid-y": `${midY}%`,
+                "--particle-spread-x": spread.x,
+                "--particle-spread-y": spread.y,
               }}
               aria-hidden="true"
             />
