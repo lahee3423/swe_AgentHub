@@ -170,7 +170,7 @@ function InspectorAgentIcon({ agentName }) {
   return "✦";
 }
 
-function PatientInfoPopup() {
+function PatientInfoPopup({ monitoring = false }) {
   const patientDetails = [
     ["Patient ID", "P-1024"],
     ["Current Department", "Cardiology"],
@@ -182,6 +182,17 @@ function PatientInfoPopup() {
     ["Mobility", "독립 보행 불가"],
     ["Transfer Precaution", "심혈관 상태 관찰"],
   ];
+  const patientMonitoring = [
+    ["Patient ID", "P-1024"],
+    ["Cardiac Conditions", "심부전 · 부정맥"],
+    ["Monitoring", "HR · SpO₂ · ECG"],
+    ["Observation", "심혈관 상태 관찰"],
+  ];
+  const requiredDevices = [
+    ["ECG Monitor", "Required"],
+    ["SpO₂ Sensor", "Required"],
+    ["Heart Rate Monitor", "Required"],
+  ];
 
   return (
     <aside className="patient-info-popup" aria-label="Patient P-1024 information">
@@ -192,20 +203,31 @@ function PatientInfoPopup() {
       <div className="patient-popup-body">
         <div className="patient-popup-profile">
           <span className="patient-avatar" aria-hidden="true"><PatientInfoIcon /></span>
-          <span><strong>Patient P-1024</strong><small>Cardiology → Orthopedics</small></span>
+          <span><strong>Patient P-1024</strong></span>
         </div>
-        <div className="patient-popup-tabs">
-          <span className="active">Step 02 · Transfer</span>
-          <span>Step 05–06 · Monitoring</span>
-        </div>
-        <section>
-          <h3>PATIENT DETAILS</h3>
-          <dl>{patientDetails.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
-        </section>
-        <section>
-          <h3>MEDICAL HISTORY</h3>
-          <dl>{medicalHistory.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
-        </section>
+        {monitoring ? (
+          <>
+            <section>
+              <h3>PATIENT MONITORING</h3>
+              <dl>{patientMonitoring.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+            </section>
+            <section>
+              <h3>REQUIRED DEVICES</h3>
+              <dl>{requiredDevices.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+            </section>
+          </>
+        ) : (
+          <>
+            <section>
+              <h3>PATIENT DETAILS</h3>
+              <dl>{patientDetails.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+            </section>
+            <section>
+              <h3>MEDICAL HISTORY</h3>
+              <dl>{medicalHistory.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+            </section>
+          </>
+        )}
       </div>
     </aside>
   );
@@ -550,7 +572,9 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
           </div>
         ))}
 
-        {isPlaying && simulationStep === 2 && <PatientInfoPopup />}
+        {isPlaying && [2, 5, 6].includes(simulationStep) && (
+          <PatientInfoPopup monitoring={simulationStep === 5 || simulationStep === 6} />
+        )}
       </div>
     </main>
   );
