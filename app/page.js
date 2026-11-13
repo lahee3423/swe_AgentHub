@@ -349,10 +349,10 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         </svg>
 
         {isPlaying && agent.id === "health" && [
-          { x: "-34px", y: "-30px" },
-          { x: "0px", y: "0px" },
-          { x: "34px", y: "30px" },
-        ].map((spread, particle) => {
+          "cubic-bezier(.25,.5,.65,.85)",
+          "linear",
+          "cubic-bezier(.35,.15,.75,.5)",
+        ].map((speedCurve, particle) => {
           return (
             <span
               key={particle}
@@ -360,8 +360,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
               style={{
                 "--particle-start-x": `${topics[0].x}%`,
                 "--particle-start-y": `${topics[0].y}%`,
-                "--particle-spread-x": spread.x,
-                "--particle-spread-y": spread.y,
+                "--particle-speed-curve": speedCurve,
               }}
               aria-hidden="true"
             />
