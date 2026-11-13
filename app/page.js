@@ -26,6 +26,49 @@ const hospitalTopicPositions = [
   [24, 22], [76, 22], [50, 84], [88, 82],
 ];
 
+const simulationSteps = [
+  {
+    sender: "Cardiology Agent", task: "transfer.request", description: "환자 이송 요청", from: "cardiology", to: "hospital",
+    payload: [["Patient ID", "P-1024"], ["Target Department", "Orthopedics"], ["Approval ID", "APR-0081"]],
+  },
+  {
+    sender: "Hospital Agent", task: "patient.transfer_context", description: "환자 이송 정보 조회", from: "hospital", to: "patientInfo",
+    payload: [["patient_id", "P-1024"], ["medical_history", "심부전, 부정맥"], ["diagnosis", "대퇴골 골절"], ["transfer_precaution", "심혈관 상태 관찰"]],
+  },
+  {
+    sender: "Hospital Agent", task: "transfer.acceptance_request", description: "환자 수용 및 병실 확인 요청", from: "hospital", to: "orthopedics",
+    payload: [["Patient ID", "P-1024"], ["Diagnosis", "대퇴골 골절"], ["Monitoring", "HR · SpO₂ · ECG"], ["Request", "병실 수용 확인"]],
+  },
+  {
+    sender: "Orthopedics Agent", task: "room.status_request", description: "병실 상태 조회", from: "orthopedics", to: "room",
+    payload: [["Room", "302"], ["Available Beds", "1"], ["Temperature", "23°C"], ["HVAC / Ventilation", "정상"]],
+  },
+  {
+    sender: "Room Agents", task: "patient.monitoring_requirements", description: "환자 모니터링 요구사항 조회", from: "room", to: "patientInfo",
+    payload: [["Patient ID", "P-1024"], ["Purpose", "이송 후 모니터링"], ["Requested Data", "심장질환 · 필요 기기"]],
+  },
+  {
+    sender: "Patient Info Agent", task: "patient.monitoring_context", description: "모니터링 준비 정보 반환", from: "patientInfo", to: "room",
+    payload: [["Patient ID", "P-1024"], ["Monitoring", "HR · SpO₂ · ECG"], ["Required Devices", "ECG Monitor · SpO₂ Sensor"], ["Precaution", "심혈관 상태 관찰"]],
+  },
+  {
+    sender: "Room Agents", task: "room.device_check", description: "병실 기기 상태 점검", from: "room", to: "room", internal: true,
+    payload: [["Room", "302"], ["ECG Monitor", "Connected"], ["SpO₂ Sensor", "Connected"], ["Heart Rate", "Operational"]],
+  },
+  {
+    sender: "Room Agents", task: "task.status", description: "병실 준비 결과 반환", from: "room", to: "orthopedics",
+    payload: [["Room", "302"], ["Environment", "Normal"], ["Available Beds", "1"], ["Devices", "Ready"]],
+  },
+  {
+    sender: "Orthopedics Agent", task: "transfer.ready", description: "환자 수용 및 병실 준비 완료", from: "orthopedics", to: "hospital",
+    payload: [["Patient ID", "P-1024"], ["Acceptance", "Approved"], ["Assigned Room", "302"], ["Room Status", "Ready"]],
+  },
+  {
+    sender: "Hospital Agent", task: "transfer.ready", description: "이송 진행 가능 상태 알림", from: "hospital", to: "cardiology",
+    payload: [["Patient ID", "P-1024"], ["Destination", "Room 302"], ["Transfer Status", "Ready"]],
+  },
+];
+
 const tabs = ["Agent Hub", "My Agent", "Agent Studio"];
 
 const tabRouteNames = {
@@ -287,32 +330,16 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
   const [simulationStep, setSimulationStep] = useState(1);
   const positions = agent.id === "health" ? hospitalTopicPositions : topicPositions;
   const topics = agentTopics[agent.id].map((label, index) => ({ label, x: positions[index][0], y: positions[index][1] }));
-  const isPatientContextStep = simulationStep === 2;
-  const stepDetails = isPatientContextStep
-    ? {
-        sender: "Hospital Agent",
-        task: "patient.transfer_context",
-        description: "환자 이송 정보 조회",
-        payload: [
-          ["patient_id", "P-1024"],
-          ["medical_history", "심부전, 부정맥"],
-          ["diagnosis", "대퇴골 골절"],
-          ["transfer_precaution", "심혈관 상태 관찰"],
-        ],
-      }
-    : {
-        sender: "Cardiology Agent",
-        task: "transfer.request",
-        description: "환자 이송 요청",
-        payload: [
-          ["Patient ID", "P-1024"],
-          ["Target Department", "Orthopedics"],
-          ["Approval ID", "APR-0081"],
-        ],
-      };
-  const activeTopic = isPatientContextStep ? topics[3] : topics[0];
-  const particleStart = isPatientContextStep ? { x: 50, y: 38 } : topics[0];
-  const particleEnd = isPatientContextStep ? topics[3] : { x: 50, y: 38 };
+  const stepDetails = simulationSteps[simulationStep - 1];
+  const nodePositions = {
+    hospital: { x: 50, y: 38 },
+    cardiology: topics[0],
+    orthopedics: topics[1],
+    room: topics[2],
+    patientInfo: topics[3],
+  };
+  const particleStart = nodePositions[stepDetails.from];
+  const particleEnd = nodePositions[stepDetails.to];
 
   useEffect(() => {
     if (!isPlaying) setSimulationStep(1);
@@ -334,8 +361,8 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         <aside className="communication-card" aria-label="Message inspector dashboard">
           <div className="inspector-header">
             <span className="inspector-heading">
-              <span className={`inspector-icon ${isPatientContextStep ? "inspector-star" : ""}`}>
-                {isPatientContextStep ? "✦" : <CardiologyIcon />}
+              <span className={`inspector-icon ${stepDetails.sender === "Cardiology Agent" ? "" : "inspector-star"}`}>
+                {stepDetails.sender === "Cardiology Agent" ? <CardiologyIcon /> : "✦"}
               </span>
               <strong>{stepDetails.sender}</strong>
             </span>
@@ -358,11 +385,11 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
           </div>
 
           <div className="inspector-footer">
-            <button type="button" className="inspector-prev" disabled={simulationStep === 1} onClick={() => setSimulationStep(1)}><span>‹</span> Prev</button>
+            <button type="button" className="inspector-prev" disabled={simulationStep === 1} onClick={() => setSimulationStep((step) => Math.max(1, step - 1))}><span>‹</span> Prev</button>
             <div className="inspector-progress" aria-label={`Step ${simulationStep} of 10`}>
               {Array.from({ length: 10 }, (_, index) => <i key={index} className={index === simulationStep - 1 ? "active" : ""} />)}
             </div>
-            <button type="button" className="inspector-next" aria-label="Next step" disabled={simulationStep === 2} onClick={() => setSimulationStep(2)}>Next <span>›</span></button>
+            <button type="button" className="inspector-next" aria-label="Next step" disabled={simulationStep === 10} onClick={() => setSimulationStep((step) => Math.min(10, step + 1))}>Next <span>›</span></button>
           </div>
         </aside>
       )}
@@ -372,16 +399,24 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
           {topics.map((topic) => (
             <line
               key={topic.label}
-              className={isPlaying && topic.label === activeTopic.label ? "active-transfer-line" : undefined}
               x1="50"
               y1="38"
               x2={topic.x}
               y2={topic.y}
             />
           ))}
+          {isPlaying && !stepDetails.internal && (
+            <line
+              className="active-transfer-line"
+              x1={particleStart.x}
+              y1={particleStart.y}
+              x2={particleEnd.x}
+              y2={particleEnd.y}
+            />
+          )}
         </svg>
 
-        {isPlaying && agent.id === "health" && [
+        {isPlaying && agent.id === "health" && !stepDetails.internal && [
           "cubic-bezier(.25,.5,.65,.85)",
           "linear",
           "cubic-bezier(.35,.15,.75,.5)",
@@ -409,7 +444,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         </div>
 
         {topics.map((topic) => (
-          <div key={topic.label} className={`detail-node ${topic.x > 50 ? "detail-node-left" : "detail-node-right"} ${agent.id === "health" ? "hospital-detail-node" : ""} ${agent.id === "health" && topic.y < 50 ? "hospital-node-top" : ""} ${topic.label === "Patient Info Agent" ? "patient-info-node" : ""}`} style={{ left: `${topic.x}%`, top: `${topic.y}%` }}>
+          <div key={topic.label} className={`detail-node ${topic.x > 50 ? "detail-node-left" : "detail-node-right"} ${agent.id === "health" ? "hospital-detail-node" : ""} ${agent.id === "health" && topic.y < 50 ? "hospital-node-top" : ""} ${topic.label === "Patient Info Agent" ? "patient-info-node" : ""} ${stepDetails.internal && topic.label === "Room Agents" ? "internal-step-node" : ""}`} style={{ left: `${topic.x}%`, top: `${topic.y}%` }}>
             <span className="detail-dot" />
             <strong>{topic.label === "Patient Info Agent" ? <>Patient Info<br />Agent</> : topic.label}</strong>
           </div>
