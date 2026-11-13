@@ -328,6 +328,7 @@ function SearchResults({ query, onPick, onSearch, onBack }) {
 
 function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
   const [simulationStep, setSimulationStep] = useState(1);
+  const [isDeviceCheckReady, setIsDeviceCheckReady] = useState(false);
   const positions = agent.id === "health" ? hospitalTopicPositions : topicPositions;
   const topics = agentTopics[agent.id].map((label, index) => ({ label, x: positions[index][0], y: positions[index][1] }));
   const stepDetails = simulationSteps[simulationStep - 1];
@@ -344,10 +345,23 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
     && [stepDetails.from, stepDetails.to].includes("patientInfo");
   const hospitalLabelAbove = (stepDetails.from === "hospital" && particleEnd.y > 38)
     || (stepDetails.to === "hospital" && particleStart.y > 38);
+  const displayedPayload = simulationStep === 7 && !isDeviceCheckReady
+    ? [["Room", "302"], ["ECG Monitor", "Not Connected"], ["SpO₂ Sensor", "Not Connected"], ["Heart Rate", "Non-operational"]]
+    : stepDetails.payload;
 
   useEffect(() => {
     if (!isPlaying) setSimulationStep(1);
   }, [isPlaying]);
+
+  useEffect(() => {
+    if (simulationStep !== 7) {
+      setIsDeviceCheckReady(false);
+      return undefined;
+    }
+
+    const readyTimer = window.setTimeout(() => setIsDeviceCheckReady(true), 1000);
+    return () => window.clearTimeout(readyTimer);
+  }, [simulationStep]);
 
   return (
     <main className={`agent-detail ${isPlaying ? "is-playing" : ""}`}>
@@ -383,7 +397,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
               <strong>PAYLOAD</strong>
             </div>
             <dl className="payload-list">
-              {stepDetails.payload.map(([label, value]) => (
+              {displayedPayload.map(([label, value]) => (
                 <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
               ))}
             </dl>
@@ -394,7 +408,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
             <div className="inspector-progress" aria-label={`Step ${simulationStep} of 10`}>
               {Array.from({ length: 10 }, (_, index) => <i key={index} className={index === simulationStep - 1 ? "active" : ""} />)}
             </div>
-            <button type="button" className="inspector-next" aria-label="Next step" disabled={simulationStep === 10} onClick={() => setSimulationStep((step) => Math.min(10, step + 1))}>Next <span>›</span></button>
+            <button type="button" className="inspector-next" aria-label="Next step" disabled={simulationStep === 10 || (simulationStep === 7 && !isDeviceCheckReady)} onClick={() => setSimulationStep((step) => Math.min(10, step + 1))}>Next <span>›</span></button>
           </div>
         </aside>
       )}
@@ -450,7 +464,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         </div>
 
         {topics.map((topic) => (
-          <div key={topic.label} className={`detail-node ${topic.x > 50 ? "detail-node-left" : "detail-node-right"} ${agent.id === "health" ? "hospital-detail-node" : ""} ${agent.id === "health" && topic.y < 50 ? "hospital-node-top" : ""} ${topic.label === "Patient Info Agent" ? "patient-info-node" : ""} ${stepDetails.internal && topic.label === "Room Agents" ? "internal-step-node" : ""}`} style={{ left: `${topic.x}%`, top: `${topic.y}%` }}>
+          <div key={topic.label} className={`detail-node ${topic.x > 50 ? "detail-node-left" : "detail-node-right"} ${agent.id === "health" ? "hospital-detail-node" : ""} ${agent.id === "health" && topic.y < 50 ? "hospital-node-top" : ""} ${topic.label === "Patient Info Agent" ? "patient-info-node" : ""} ${stepDetails.internal && topic.label === "Room Agents" ? (isDeviceCheckReady ? "internal-step-node" : "room-node-loading") : ""}`} style={{ left: `${topic.x}%`, top: `${topic.y}%` }}>
             <span className="detail-dot" />
             <strong>{topic.label === "Patient Info Agent" ? <>Patient Info<br />Agent</> : topic.label}</strong>
           </div>

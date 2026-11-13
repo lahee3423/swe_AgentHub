@@ -149,6 +149,8 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .patient-info-node .detail-dot { width: 9px; height: 9px; background: var(--gray); box-shadow: 0 0 0 4px rgba(107, 107, 107, .09); }
 .internal-step-node .detail-dot { animation: internal-node-pulse 1.15s ease-in-out infinite; }
 @keyframes internal-node-pulse { 50% { transform: scale(1.35); box-shadow: 0 0 0 9px rgba(165,0,52,.15), 0 0 14px rgba(165,0,52,.65); } }
+.room-node-loading .detail-dot { background: transparent; border: 2px solid rgba(165,0,52,.22); border-top-color: var(--accent); box-shadow: 0 0 0 5px rgba(165,0,52,.08); animation: room-node-loading .7s linear infinite; }
+@keyframes room-node-loading { to { transform: rotate(360deg); } }
 .communication-card { width: min(520px, 40vw); position: fixed; left: 3.5vw; bottom: 24px; z-index: 6; padding: 16px; border-radius: 22px; background: rgba(165,0,52,.12); color: var(--ink); box-shadow: 0 22px 55px rgba(38,38,38,.12); }
 .inspector-header { min-height: 42px; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 0 2px 12px; }
 .inspector-heading { display: flex; align-items: center; gap: 11px; color: #4c3f43; font-size: 15px; }
