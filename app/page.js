@@ -323,6 +323,14 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
               <div><dt>Approval ID</dt><dd>APR-0081</dd></div>
             </dl>
           </div>
+
+          <div className="inspector-footer">
+            <button type="button" className="inspector-prev" disabled><span>‹</span> Prev</button>
+            <div className="inspector-progress" aria-label="Step 1 of 10">
+              {Array.from({ length: 10 }, (_, index) => <i key={index} className={index === 0 ? "active" : ""} />)}
+            </div>
+            <button type="button" className="inspector-next" aria-label="Next step">Next <span>›</span></button>
+          </div>
         </aside>
       )}
 

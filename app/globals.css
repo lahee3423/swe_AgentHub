@@ -154,6 +154,15 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .payload-list div:last-child { border-bottom: 0; }
 .payload-list dt { color: #6b5d62; font-size: 13px; }
 .payload-list dd { margin: 0; text-align: right; font-size: 14px; font-weight: 750; }
+.inspector-footer { min-height: 48px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding-top: 10px; }
+.inspector-footer button { min-width: 82px; height: 34px; padding: 0 14px; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 9px; font-size: 12px; cursor: pointer; }
+.inspector-footer button span { font-size: 22px; line-height: 1; }
+.inspector-prev { justify-self: start; border: 1px solid rgba(107,107,107,.3); background: transparent; color: #6f6669; }
+.inspector-prev:disabled { color: #aaa0a3; cursor: default; }
+.inspector-next { justify-self: end; border: 0; background: #111; color: var(--white); }
+.inspector-progress { display: flex; align-items: center; justify-content: center; gap: 5px; }
+.inspector-progress i { width: 6px; height: 6px; border-radius: 6px; background: rgba(107,107,107,.25); }
+.inspector-progress i.active { width: 24px; background: var(--accent); }
 
 .secondary { min-height: calc(100svh - 102px); flex: 1; padding: 10vh 9vw; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
 .secondary h1 { font-size: clamp(58px, 7vw, 110px); margin: 22px 0 30px; max-width: 850px; }
@@ -218,6 +227,11 @@ footer { height: 44px; padding: 0 3.5vw; display: flex; align-items: center; jus
   .payload-heading { margin: 8px 0 4px; font-size: 11px; }
   .payload-list div { min-height: 37px; }
   .payload-list dt, .payload-list dd { font-size: 11px; }
+  .inspector-footer { min-height: 42px; gap: 8px; padding-top: 7px; }
+  .inspector-footer button { min-width: 65px; height: 30px; padding: 0 10px; gap: 6px; font-size: 10px; }
+  .inspector-progress { gap: 3px; }
+  .inspector-progress i { width: 5px; height: 5px; }
+  .inspector-progress i.active { width: 18px; }
   .secondary { min-height: calc(100svh - 54px); padding: 10vh 28px 100px; }
   .secondary h1 { font-size: 52px; letter-spacing: -3px; }
   .secondary-art { width: 96vw; opacity: .65; right: -43vw; }
