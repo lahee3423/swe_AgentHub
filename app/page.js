@@ -170,6 +170,47 @@ function InspectorAgentIcon({ agentName }) {
   return "✦";
 }
 
+function PatientInfoPopup() {
+  const patientDetails = [
+    ["Patient ID", "P-1024"],
+    ["Current Department", "Cardiology"],
+    ["Transfer To", "Orthopedics"],
+  ];
+  const medicalHistory = [
+    ["Cardiac Conditions", "심부전 · 부정맥"],
+    ["Current Diagnosis", "대퇴골 골절"],
+    ["Mobility", "독립 보행 불가"],
+    ["Transfer Precaution", "심혈관 상태 관찰"],
+  ];
+
+  return (
+    <aside className="patient-info-popup" aria-label="Patient P-1024 information">
+      <header>
+        <span className="patient-popup-title"><PatientInfoIcon /><strong>PATIENT INFO</strong></span>
+        <span className="patient-popup-id">P-1024</span>
+      </header>
+      <div className="patient-popup-body">
+        <div className="patient-popup-profile">
+          <span className="patient-avatar" aria-hidden="true"><PatientInfoIcon /></span>
+          <span><strong>Patient P-1024</strong><small>Cardiology → Orthopedics</small></span>
+        </div>
+        <div className="patient-popup-tabs">
+          <span className="active">Step 02 · Transfer</span>
+          <span>Step 05–06 · Monitoring</span>
+        </div>
+        <section>
+          <h3>PATIENT DETAILS</h3>
+          <dl>{patientDetails.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+        </section>
+        <section>
+          <h3>MEDICAL HISTORY</h3>
+          <dl>{medicalHistory.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+        </section>
+      </div>
+    </aside>
+  );
+}
+
 function Network({ query, onPick, onSearch, onSelect }) {
   const [isMounted, setIsMounted] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -508,6 +549,8 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
             <strong>{topic.label === "Patient Info Agent" ? <>Patient Info<br />Agent</> : topic.label}</strong>
           </div>
         ))}
+
+        {isPlaying && simulationStep === 2 && <PatientInfoPopup />}
       </div>
     </main>
   );
