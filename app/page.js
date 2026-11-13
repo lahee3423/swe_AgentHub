@@ -84,6 +84,15 @@ function PlayIcon() {
   );
 }
 
+function CardiologyIcon() {
+  return (
+    <svg viewBox="0 0 32 28" aria-hidden="true">
+      <path d="M16 25S3.5 18.2 3.5 9.6A6.2 6.2 0 0 1 16 7.8a6.2 6.2 0 0 1 12.5 1.8C28.5 18.2 16 25 16 25Z" />
+      <path d="M5.5 14h5l2.1-4.2 3.2 8.3 2.5-5.1 1.4 1h6.8" />
+    </svg>
+  );
+}
+
 function Network({ query, onPick, onSearch, onSelect }) {
   const [isMounted, setIsMounted] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -294,16 +303,16 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         <aside className="communication-card" aria-label="Message inspector dashboard">
           <div className="inspector-header">
             <span className="inspector-heading">
-              <span className="inspector-icon" aria-hidden="true"><i /><i /><i /></span>
-              <strong>MESSAGE INSPECTOR</strong>
+              <span className="inspector-icon"><CardiologyIcon /></span>
+              <strong>Cardiology Agent</strong>
             </span>
-            <span className="inspector-step">STEP 01 / 10</span>
           </div>
 
           <div className="inspector-content">
-            <span className="inspector-label">CURRENT TASK</span>
-            <strong className="inspector-task">transfer.request</strong>
-            <p>환자 이송 요청</p>
+            <div className="inspector-task-row">
+              <strong className="inspector-task">transfer.request</strong>
+              <span>환자 이송 요청</span>
+            </div>
 
             <div className="payload-heading">
               <span className="payload-icon" aria-hidden="true">{"{}"}</span>
@@ -314,12 +323,6 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
               <div><dt>Target Department</dt><dd>Orthopedics</dd></div>
               <div><dt>Approval ID</dt><dd>APR-0081</dd></div>
             </dl>
-          </div>
-
-          <div className="inspector-footer">
-            <button type="button" className="inspector-prev" disabled><span>‹</span> Prev</button>
-            <span>1 / 10</span>
-            <button type="button" className="inspector-next">Next <span>›</span></button>
           </div>
         </aside>
       )}
