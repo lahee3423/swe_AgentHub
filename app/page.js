@@ -284,8 +284,39 @@ function SearchResults({ query, onPick, onSearch, onBack }) {
 }
 
 function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
+  const [simulationStep, setSimulationStep] = useState(1);
   const positions = agent.id === "health" ? hospitalTopicPositions : topicPositions;
   const topics = agentTopics[agent.id].map((label, index) => ({ label, x: positions[index][0], y: positions[index][1] }));
+  const isPatientContextStep = simulationStep === 2;
+  const stepDetails = isPatientContextStep
+    ? {
+        sender: "Hospital Agent",
+        task: "patient.transfer_context",
+        description: "환자 이송 정보 조회",
+        payload: [
+          ["patient_id", "P-1024"],
+          ["medical_history", "심부전, 부정맥"],
+          ["diagnosis", "대퇴골 골절"],
+          ["transfer_precaution", "심혈관 상태 관찰"],
+        ],
+      }
+    : {
+        sender: "Cardiology Agent",
+        task: "transfer.request",
+        description: "환자 이송 요청",
+        payload: [
+          ["Patient ID", "P-1024"],
+          ["Target Department", "Orthopedics"],
+          ["Approval ID", "APR-0081"],
+        ],
+      };
+  const activeTopic = isPatientContextStep ? topics[3] : topics[0];
+  const particleStart = isPatientContextStep ? { x: 50, y: 38 } : topics[0];
+  const particleEnd = isPatientContextStep ? topics[3] : { x: 50, y: 38 };
+
+  useEffect(() => {
+    if (!isPlaying) setSimulationStep(1);
+  }, [isPlaying]);
 
   return (
     <main className={`agent-detail ${isPlaying ? "is-playing" : ""}`}>
@@ -303,33 +334,35 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         <aside className="communication-card" aria-label="Message inspector dashboard">
           <div className="inspector-header">
             <span className="inspector-heading">
-              <span className="inspector-icon"><CardiologyIcon /></span>
-              <strong>Cardiology Agent</strong>
+              <span className={`inspector-icon ${isPatientContextStep ? "inspector-star" : ""}`}>
+                {isPatientContextStep ? "✦" : <CardiologyIcon />}
+              </span>
+              <strong>{stepDetails.sender}</strong>
             </span>
           </div>
 
           <div className="inspector-content">
             <div className="inspector-task-row">
-              <strong className="inspector-task">transfer.request</strong>
-              <span>환자 이송 요청</span>
+              <strong className="inspector-task">{stepDetails.task}</strong>
+              <span>{stepDetails.description}</span>
             </div>
 
             <div className="payload-heading">
               <strong>PAYLOAD</strong>
             </div>
             <dl className="payload-list">
-              <div><dt>Patient ID</dt><dd>P-1024</dd></div>
-              <div><dt>Target Department</dt><dd>Orthopedics</dd></div>
-              <div><dt>Approval ID</dt><dd>APR-0081</dd></div>
+              {stepDetails.payload.map(([label, value]) => (
+                <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
+              ))}
             </dl>
           </div>
 
           <div className="inspector-footer">
-            <button type="button" className="inspector-prev" disabled><span>‹</span> Prev</button>
-            <div className="inspector-progress" aria-label="Step 1 of 10">
-              {Array.from({ length: 10 }, (_, index) => <i key={index} className={index === 0 ? "active" : ""} />)}
+            <button type="button" className="inspector-prev" disabled={simulationStep === 1} onClick={() => setSimulationStep(1)}><span>‹</span> Prev</button>
+            <div className="inspector-progress" aria-label={`Step ${simulationStep} of 10`}>
+              {Array.from({ length: 10 }, (_, index) => <i key={index} className={index === simulationStep - 1 ? "active" : ""} />)}
             </div>
-            <button type="button" className="inspector-next" aria-label="Next step">Next <span>›</span></button>
+            <button type="button" className="inspector-next" aria-label="Next step" disabled={simulationStep === 2} onClick={() => setSimulationStep(2)}>Next <span>›</span></button>
           </div>
         </aside>
       )}
@@ -339,7 +372,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
           {topics.map((topic) => (
             <line
               key={topic.label}
-              className={isPlaying && topic.label === "Cardiology Agent" ? "active-transfer-line" : undefined}
+              className={isPlaying && topic.label === activeTopic.label ? "active-transfer-line" : undefined}
               x1="50"
               y1="38"
               x2={topic.x}
@@ -355,11 +388,13 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         ].map((speedCurve, particle) => {
           return (
             <span
-              key={particle}
+              key={`${simulationStep}-${particle}`}
               className="transfer-particle"
               style={{
-                "--particle-start-x": `${topics[0].x}%`,
-                "--particle-start-y": `${topics[0].y}%`,
+                "--particle-start-x": `${particleStart.x}%`,
+                "--particle-start-y": `${particleStart.y}%`,
+                "--particle-end-x": `${particleEnd.x}%`,
+                "--particle-end-y": `${particleEnd.y}%`,
                 "--particle-speed-curve": speedCurve,
               }}
               aria-hidden="true"

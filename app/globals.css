@@ -130,7 +130,7 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 @keyframes transfer-line-glow { 50% { stroke-width: 1.8; opacity: .72; filter: drop-shadow(0 0 5px rgba(165,0,52,1)) drop-shadow(0 0 12px rgba(165,0,52,.7)); } }
 @keyframes transfer-particle-move {
   0% { left: var(--particle-start-x); top: var(--particle-start-y); }
-  100% { left: 50%; top: 38%; }
+  100% { left: var(--particle-end-x); top: var(--particle-end-y); }
 }
 .detail-center { position: absolute; left: 50%; top: 38%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; text-align: center; }
 .hospital-detail-center { transform: translate(-50%, -29px); }
@@ -150,6 +150,7 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .inspector-heading { display: flex; align-items: center; gap: 11px; color: #4c3f43; font-size: 15px; }
 .inspector-icon { width: 25px; height: 23px; display: grid; place-items: center; }
 .inspector-icon svg { width: 100%; height: 100%; fill: rgba(165,0,52,.08); stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.inspector-icon.inspector-star { color: var(--accent); font-size: 25px; line-height: 1; }
 .inspector-content { padding: 14px 18px 0; border: 1px solid rgba(165,0,52,.2); border-radius: 17px; background: rgba(255,255,255,.94); }
 .inspector-task-row { min-height: 46px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-bottom: 12px; border-bottom: 1px solid rgba(165,0,52,.2); }
 .inspector-task { color: var(--accent); font-size: 19px; }
@@ -166,6 +167,7 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .inspector-prev { justify-self: start; border: 1px solid rgba(107,107,107,.3); background: transparent; color: #6f6669; }
 .inspector-prev:disabled { color: #aaa0a3; cursor: default; }
 .inspector-next { justify-self: end; border: 0; background: #111; color: var(--white); }
+.inspector-next:disabled { opacity: .35; cursor: default; }
 .inspector-progress { display: flex; align-items: center; justify-content: center; gap: 5px; }
 .inspector-progress i { width: 6px; height: 6px; border-radius: 6px; background: rgba(107,107,107,.25); }
 .inspector-progress i.active { width: 24px; background: var(--accent); }
