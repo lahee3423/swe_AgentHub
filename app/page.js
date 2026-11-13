@@ -349,9 +349,9 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         </svg>
 
         {isPlaying && agent.id === "health" && [
-          { x: "-10px", y: "-6px" },
+          { x: "-34px", y: "-30px" },
           { x: "0px", y: "0px" },
-          { x: "10px", y: "6px" },
+          { x: "34px", y: "30px" },
         ].map((spread, particle) => {
           return (
             <span
