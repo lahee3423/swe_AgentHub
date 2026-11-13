@@ -135,7 +135,7 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .detail-node-right strong { left: 22px; }
 .detail-node-left strong { right: 22px; }
 .hospital-detail-node strong { left: 50%; right: auto; top: 20px; transform: translateX(-50%); text-align: center; background: transparent; }
-.patient-info-node .detail-dot { width: 9px; height: 9px; box-shadow: 0 0 0 4px rgba(165, 0, 52, .08); }
+.patient-info-node .detail-dot { width: 9px; height: 9px; background: var(--gray); box-shadow: 0 0 0 4px rgba(107, 107, 107, .09); }
 .patient-info-node strong { font-size: clamp(10px, .85vw, 13px); }
 .communication-card { width: 280px; position: fixed; left: 3.5vw; bottom: 28px; z-index: 6; padding: 18px; border-radius: 18px; background: var(--accent); color: var(--white); box-shadow: 0 18px 45px rgba(165,0,52,.24); }
 .communication-card-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 13px; border-bottom: 1px solid rgba(255,255,255,.24); font-size: 8px; font-weight: 800; letter-spacing: 1.3px; }
