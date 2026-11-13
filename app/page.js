@@ -44,7 +44,7 @@ const simulationSteps = [
     payload: [["Room", "302"], ["Available Beds", "1"], ["Temperature", "23°C"], ["HVAC / Ventilation", "정상"]],
   },
   {
-    sender: "Room Agents", task: "patient.monitoring_requirements", description: "환자 모니터링 요구사항 조회", from: "room", to: "patientInfo",
+    sender: "Room Agents", task: "patient.monitoring_requirements", description: "환자 요구사항 조회", from: "room", to: "patientInfo",
     payload: [["Patient ID", "P-1024"], ["Purpose", "이송 후 모니터링"], ["Requested Data", "심장질환 · 필요 기기"]],
   },
   {
@@ -370,6 +370,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
               </span>
               <strong>{stepDetails.sender}</strong>
             </span>
+            <span className="inspector-step-count">STEP {String(simulationStep).padStart(2, "0")} / 10</span>
           </div>
 
           <div className="inspector-content">
@@ -393,7 +394,6 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
             <div className="inspector-progress" aria-label={`Step ${simulationStep} of 10`}>
               {Array.from({ length: 10 }, (_, index) => <i key={index} className={index === simulationStep - 1 ? "active" : ""} />)}
             </div>
-            <span className="inspector-step-count">STEP {String(simulationStep).padStart(2, "0")} / 10</span>
             <button type="button" className="inspector-next" aria-label="Next step" disabled={simulationStep === 10} onClick={() => setSimulationStep((step) => Math.min(10, step + 1))}>Next <span>›</span></button>
           </div>
         </aside>
