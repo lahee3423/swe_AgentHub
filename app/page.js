@@ -318,7 +318,7 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
         <div className={`detail-center ${agent.id === "health" ? "hospital-detail-center" : ""}`}>
           <span className="detail-star">✦</span>
           <strong>{agent.name}</strong>
-          <small>{agent.note}</small>
+          {agent.id !== "health" && <small>{agent.note}</small>}
         </div>
 
         {topics.map((topic) => (
