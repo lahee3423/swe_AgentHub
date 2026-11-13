@@ -346,17 +346,20 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
               y2={topic.y}
             />
           ))}
-          {isPlaying && agent.id === "health" && [0, 1, 2].map((particle) => (
-            <circle key={particle} className="transfer-particle" r="0.72">
-              <animateMotion
-                path={`M ${topics[0].x} ${topics[0].y} L 50 38`}
-                dur="1.8s"
-                begin={`-${particle * .6}s`}
-                repeatCount="indefinite"
-              />
-            </circle>
-          ))}
         </svg>
+
+        {isPlaying && agent.id === "health" && [0, 1, 2].map((particle) => (
+          <span
+            key={particle}
+            className="transfer-particle"
+            style={{
+              "--particle-start-x": `${topics[0].x}%`,
+              "--particle-start-y": `${topics[0].y}%`,
+              "--particle-delay": `${particle * -.28}s`,
+            }}
+            aria-hidden="true"
+          />
+        ))}
 
         <div className={`detail-center ${agent.id === "health" ? "hospital-detail-center" : ""}`}>
           <span className="detail-star">✦</span>
