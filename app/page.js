@@ -157,11 +157,11 @@ function Network({ query, onPick, onSearch, onSelect }) {
       return { ...agent, movingX: agent.x, movingY: agent.y, movingPoints: agent.points };
     }
 
-    const agentPhase = motionTime * .48 + agentIndex * 1.37;
+    const agentPhase = motionTime * .55 + agentIndex * 1.37;
     return {
       ...agent,
-      movingX: agent.x + Math.sin(agentPhase) * .28,
-      movingY: agent.y + Math.cos(agentPhase * .86) * .22,
+      movingX: agent.x + Math.sin(agentPhase) * .9,
+      movingY: agent.y + Math.cos(agentPhase * .86) * .7,
       movingPoints: agent.points.map(([x, y], pointIndex) => {
         const pointPhase = motionTime * (.62 + pointIndex * .09) + agentIndex * 1.61 + pointIndex * .83;
         return [x + Math.sin(pointPhase) * 1.65, y + Math.cos(pointPhase * .91) * 1.3];
