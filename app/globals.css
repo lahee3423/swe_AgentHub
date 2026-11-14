@@ -68,6 +68,22 @@ h1 em { font-family: inherit; font-style: normal; font-weight: 800; }
 .studio-core h1 { white-space: nowrap; }
 .studio-core .search { width: min(100%, 620px); }
 
+.my-agents { min-height: calc(100svh - 102px); flex: 1; position: relative; padding: clamp(54px, 8vh, 92px) 3.5vw 70px; background: radial-gradient(circle at 50% 18%, rgba(165,0,52,.13), rgba(165,0,52,.045) 28%, transparent 58%); }
+.my-agents-heading { max-width: 700px; margin: 0 auto 48px; text-align: center; }
+.my-agents-heading h1 { margin-bottom: 18px; font-size: clamp(48px, 5.2vw, 78px); }
+.my-agents-heading p { margin: 0; color: var(--gray); font-size: 14px; }
+.my-agents-grid { width: min(1380px, 100%); margin: 0 auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.my-agent-card { min-width: 0; min-height: 290px; padding: 26px 24px 22px; border: 1px solid rgba(38,38,38,.15); border-radius: 28px; background: rgba(255,255,255,.62); box-shadow: 0 18px 40px rgba(38,38,38,.06); text-align: left; cursor: pointer; display: flex; flex-direction: column; transition: transform .25s ease, background .25s ease, box-shadow .25s ease; }
+.my-agent-card:hover { transform: translateY(-9px); background: rgba(255,255,255,.92); box-shadow: 0 24px 50px rgba(165,0,52,.11); }
+.my-agent-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.my-agent-symbol { font-size: 38px; line-height: 1; }
+.my-agent-status { display: flex; align-items: center; gap: 6px; color: var(--gray); font-size: 9px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; }
+.my-agent-status i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(165,0,52,.1); }
+.my-agent-name { margin-top: 36px; font-size: 23px; font-weight: 800; line-height: 1.08; letter-spacing: -.7px; }
+.my-agent-note { margin-top: 9px; color: var(--gray); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+.my-agent-meta { margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(38,38,38,.12); display: flex; align-items: center; justify-content: space-between; font-size: 11px; font-weight: 700; }
+.my-agent-meta span:last-child { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: var(--white); display: grid; place-items: center; font-size: 14px; }
+
 @keyframes search-dock {
   to {
     top: var(--search-target-top);
@@ -244,6 +260,7 @@ footer { height: 44px; padding: 0 3.5vw; display: flex; align-items: center; jus
   .header { padding: 0 22px; }
   .network { min-height: 760px; }
   .hub-core { width: min(72vw, 530px); }
+  .my-agents-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (max-width: 640px) {
@@ -303,6 +320,14 @@ footer { height: 44px; padding: 0 3.5vw; display: flex; align-items: center; jus
   .secondary { min-height: calc(100svh - 54px); padding: 10vh 28px 100px; }
   .secondary h1 { font-size: 52px; letter-spacing: -3px; }
   .secondary-art { width: 96vw; opacity: .65; right: -43vw; }
+  .my-agents { min-height: calc(100svh - 54px); padding: 54px 20px 70px; overflow-y: auto; }
+  .my-agents-heading { margin-bottom: 30px; }
+  .my-agents-heading h1 { margin: 12px 0 14px; font-size: 44px; letter-spacing: -3px; }
+  .my-agents-heading p { font-size: 12px; line-height: 1.5; }
+  .my-agents-grid { grid-template-columns: 1fr; gap: 12px; }
+  .my-agent-card { min-height: 210px; padding: 22px; border-radius: 24px; }
+  .my-agent-card:hover { transform: none; }
+  .my-agent-name { margin-top: 24px; font-size: 22px; }
   .search-results { min-height: calc(100svh - 54px); padding: 22px 20px 54px; overflow-y: auto; }
   .results-toolbar { grid-template-columns: 40px 1fr; gap: 10px; }
   .results-back { width: 40px; height: 40px; font-size: 19px; }

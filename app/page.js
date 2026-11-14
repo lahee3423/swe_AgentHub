@@ -580,16 +580,30 @@ function AgentDetail({ agent, onBack, isPlaying, onPlay, onExitPlay }) {
   );
 }
 
-function SecondaryPage({ type, onBack }) {
+function MyAgentsPage({ onSelect }) {
   return (
-    <main className="secondary">
-      <div className="secondary-art" aria-hidden="true">
-        <span className="big-asterisk">✳</span><span className="ring ring-a"/><span className="ring ring-b"/>
+    <main className="my-agents" aria-label="My agents">
+      <header className="my-agents-heading">
+        <span className="eyebrow">YOUR ACTIVE NETWORK</span>
+        <h1>Agents in use</h1>
+        <p>Agents currently connected to your everyday routines.</p>
+      </header>
+      <div className="my-agents-grid">
+        {agents.map((agent) => (
+          <button key={agent.id} className="my-agent-card" onClick={() => onSelect(agent)}>
+            <span className="my-agent-card-top">
+              <span className="my-agent-symbol" aria-hidden="true">{agent.icon}</span>
+              <span className="my-agent-status"><i />Online</span>
+            </span>
+            <span className="my-agent-name">{agent.name}</span>
+            <span className="my-agent-note">{agent.note}</span>
+            <span className="my-agent-meta">
+              <span>{agentTopics[agent.id].length} connections</span>
+              <span aria-hidden="true">↗</span>
+            </span>
+          </button>
+        ))}
       </div>
-      <span className="eyebrow">YOUR PERSONAL NETWORK</span>
-      <h1>Your agents,<br/><em>all in one place.</em></h1>
-      <p>Agents you create and save will live here, ready whenever you need them.</p>
-      <button className="primary-button" onClick={onBack}>Discover agents<span>↗</span></button>
     </main>
   );
 }
@@ -684,7 +698,7 @@ export default function Home() {
             : <Network query={query} onPick={setQuery} onSearch={() => navigate({ view: "search", query })} onSelect={(agent) => navigate({ agent })} />
         : activeTab === "Agent Studio"
           ? <AgentStudioPage />
-          : <SecondaryPage type={activeTab} onBack={() => changeTab("Agent Hub")} />}
+          : <MyAgentsPage onSelect={(agent) => navigate({ agent })} />}
       {!isAgentPlaying && <footer><span>AGENT HUB / 2026</span><span>Human needs, intelligent connections.</span></footer>}
     </div>
   );
